@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.1.6] - 2025-02-26
+### Added
+- Added `clean_csv.ipynb` for processing and cleaning police report CSV data.
+  - Drops empty rows based on key columns ('Incident #', 'Date', 'Type', 'Location').
+  - Removes invalid single-letter entries in 'Type'.
+  - Cleans up unwanted newline characters and invalid suffixes in 'Type'.
+  - Standardizes 'Location' formatting and extracts prefix/address.
+  - Removes URLs from the 'Charges' column.
+  - Saves a modified CSV for further review.
+- Updated `requirements.txt` with dependencies required for data processing.
+
 ## [0.1.5] - 2025-02-05
 ### Fixed
 - Fixed an issue where the script was running indefinitely due to missing a check for standard separators (`=` or `-`).
