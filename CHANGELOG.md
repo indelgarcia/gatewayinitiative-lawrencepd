@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.1.7] - 2025-03-21
+### Added
+- Added logic to separate the `Location` column into `Original Location`, `Location Prefix`, and `Location` (address only).
+- Saved separated location output to `location_separation.csv` for intermediate review.
+- Introduced `checkpoint1.csv` to save a backup of the cleaned dataset.
+- Counted total vs. unique `Incident #` values and printed basic dataset statistics.
+- Removed duplicate rows based on `Incident #` and stored result in `checkpoint1_no_dupes`.
+- Filtered rows with non-empty `Charges` into `charges_only.csv` for manual review.
+- Implemented function to unnest multiple arrests and associated charges from a single row using regex.
+  - Preserved the original row for the first person listed.
+  - Created new rows for additional individuals extracted from the `Charges` field.
+  - Saved unnested output to `charges_unnested.csv`.
+- Merged unnested charge data back into the cleaned base dataset and saved result as `checkpoint2.csv`.
+
+### Changed
+- Replaced uses of `target_csv_backup` with deduplicated checkpoints (`checkpoint1`, `checkpoint1_no_dupes`) in print statements and analysis.
+- Updated URL cleaning in `Charges` to use `checkpoint1_no_dupes` instead of raw data.
+
 ## [0.1.6] - 2025-02-26
 ### Added
 - Added `clean_csv.ipynb` for processing and cleaning police report CSV data.
