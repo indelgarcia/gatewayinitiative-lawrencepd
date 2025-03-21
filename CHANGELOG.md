@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.1.8] - 2025-04-15
+### Added
+- Added `clean_address` function to clean up the `Location` field by removing unwanted parts.
+- Applied `clean_address` function to the `Location` column in `checkpoint2`.
+- Introduced geocoding functionality using `geopy` to obtain latitude and longitude for addresses.
+- Implemented caching for geocoding results to improve performance and avoid duplicate requests.
+- Logged addresses that could not be geocoded and any errors encountered during the process.
+- Saved geocoded results to `checkpoint2_geocoded.csv`.
+- Logged not found addresses to `not_found_addresses.txt`.
+- Logged geocoding errors to `geocode_errors.txt`.
+
 ## [0.1.7] - 2025-03-21
 ### Added
 - Added logic to separate the `Location` column into `Original Location`, `Location Prefix`, and `Location` (address only).
