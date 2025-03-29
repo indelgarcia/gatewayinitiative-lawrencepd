@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.1.9] - 2025-04-01
+### Added
+- Created `categorize_visualize.ipynb` notebook to group incident types into higher-level FBI-style crime categories.
+- Mapped `Type` values into broader categories (e.g., `MOTOR_VEHICLE_INCIDENTS`, `PROPERTY_CRIMES`, `VIOLENT_AND_WEAPON_OFFENSES`, etc.).
+- Calculated and visualized distribution of incidents by category using bar charts and sunburst plots.
+- Created a new column `category` in the dataset to reflect these groupings.
+- Generated yearly breakdown of incident categories and subtypes using `data_by_year` dictionary for interactive visualization.
+
+### Visualizations
+- Implemented a clean and interactive web dashboard (`incident_dashboard.html`) using Plotly.js.
+  - Features: Year selector, bar chart for top-level categories, and dynamic sunburst chart for subcategories.
+  - Saved output to `../Figures/incident_dashboard.html`.
+
+### Changed
+- Updated `requirements.txt` significantly:
+  - Added libraries like `matplotlib`, `numpy`, `pdfminer.six`, `jupyter_client`, and many more for plotting, notebook compatibility, and dashboard generation.
+
+### Notes
+- This marks the first version to integrate full data visualization and categorical organization of incidents, preparing the dataset for deeper trend analysis.
+
 ## [0.1.8] - 2025-04-15
 ### Added
 - Added `clean_address` function to clean up the `Location` field by removing unwanted parts.
