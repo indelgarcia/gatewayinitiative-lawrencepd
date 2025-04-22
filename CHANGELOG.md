@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.1] - 2025-04-21  
+### Added  
+- Created `hash.ipynb` notebook to generate anonymized hashed identifiers for individuals.  
+- Loaded `checkpoint4_geocoded.csv` and defined a SHA-256 hashing function based on `Name` and `DOB`.  
+- Applied hashing function only to rows with valid `Charges` to create a new `person_id` column.  
+- Ensured null-safe and whitespace-trimmed hashing to avoid mismatches.  
+- Exported the updated dataset to `checkpoint5_hashed.csv` in the `../data/checkpoints` directory.
+
+### Notes  
+- This step enables secure tracking of individuals across datasets without exposing sensitive information.
+
 ## [0.2.0] - 2025-04-21  
 ### Added  
 - Created `geocode_part2.ipynb` notebook to merge geocoded latitude and longitude data with the existing `checkpoint3_geocoded.csv` file.  
