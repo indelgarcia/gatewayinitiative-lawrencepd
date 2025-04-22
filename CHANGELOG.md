@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.0] - 2025-04-21  
+### Added  
+- Created `geocode_part2.ipynb` notebook to merge geocoded latitude and longitude data with the existing `checkpoint3_geocoded.csv` file.  
+- Read `geocoded_addresses_final.csv` and `checkpoint3_geocoded.csv` using `pandas` and constructed a full address for merging by appending `, Lawrence, MA` to the `Location` column.  
+- Merged datasets on the cleaned address to fill in missing latitude and longitude values in `checkpoint3`.  
+- Prioritized geocoded latitude and longitude where available, using `.combine_first()` to preserve existing values when necessary.  
+- Removed helper columns (`address`, `geo_lat`, `geo_lon`, and `cleaned_address`) after the merge.  
+- Saved the resulting dataframe as `checkpoint4_geocoded.csv` in the `../data/checkpoints` directory.
+
+### Notes  
+- This notebook is part of the second phase of geocoding integration, ensuring that all available coordinates are included 
+
 ## [0.1.9] - 2025-04-01
 ### Added
 - Created `categorize_visualize.ipynb` notebook to group incident types into higher-level FBI-style crime categories.
