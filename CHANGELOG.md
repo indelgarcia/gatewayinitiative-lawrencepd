@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.2] - 2025-04-27  
+### Changed  
+- Updated `categorize_visualizations.ipynb` to load from `checkpoint5_hashed.csv` instead of `checkpoint2_geocoded.csv` at the start of the notebook.
+- Reorganized code to define the `notebook_dir` and read from the correct checkpoints (`checkpoint5_hashed.csv`, `checkpoint6_category_crime_year.csv`).
+- Added export of the updated dataframe to `checkpoint6_category_crime_year.csv` before creating figures.
+- Standardized figure output directory creation after saving data.
+
+### Added  
+- Introduced serious crime classification logic based on an expanded FBI-style `SERIOUS_TYPES` set.
+- Created a new column `crime_severity` that labels incidents as 'Serious' or 'Non-Serious' based on incident `Type`.
+- Printed distribution counts of serious vs. non-serious crimes for verification.
+- Exported the updated dataframe with `crime_severity` to `checkpoint7_serious_crimes.csv` for downstream analysis.
+
+### Notes  
+- This update standardizes the dataset for crime severity classification, preparing it for focused analysis and improved visualizations.
+
 ## [0.2.1] - 2025-04-21  
 ### Added  
 - Created `hash.ipynb` notebook to generate anonymized hashed identifiers for individuals.  
