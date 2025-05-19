@@ -30,7 +30,9 @@ lawrence_geojson = load_lawrence_boundary()
 # -----------------------------
 @st.cache_data
 def load_data():
-    df =pd.read_csv('checkpoint7_serious_crimes_subset.csv')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, "checkpoint7_serious_crimes_subset.csv")
+    df = pd.read_csv(file_path)
     data = df[['Latitude', 'Longitude', 'category', 'crime_severity', 'Incident #', 'Date']].dropna()
     data['Date'] = pd.to_datetime(data['Date'])
     data['year'] = data['Date'].dt.year
