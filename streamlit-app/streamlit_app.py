@@ -52,8 +52,8 @@ with st.sidebar:
     # selected_year = st.selectbox("📅 Select Year", sorted(data['year'].unique()))
     selected_year = st.multiselect(
     "📅 Select Year(s)",
-    sorted(data['year'].unique()),
-    default=sorted(data['year'].unique())  # show all years by default
+    sorted(data['year'].unique().tolist()),
+    default=sorted(data['year'].unique().tolist())  # show all years by default
     )
     st.markdown("---")
     st.subheader("📌 Incident Categories")
