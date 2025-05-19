@@ -5,9 +5,9 @@ import pandas as pd
 import folium
 from folium.plugins import MarkerCluster, HeatMap
 from streamlit_folium import st_folium
-
+from pathlib import Path
 from folium.plugins import MarkerCluster
-
+import os
 import json
 
 
@@ -19,7 +19,9 @@ st.title("Lawrence Police Daily Logs")
 # -----------------------------
 @st.cache_data
 def load_lawrence_boundary():
-    with open("lawrence_boundary.geojson", "r") as f:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_dir, "lawrence_boundary.geojson")
+    with open(file_path, "r") as f:
         lawrence_geojson = json.load(f)
         return lawrence_geojson
 lawrence_geojson = load_lawrence_boundary()
