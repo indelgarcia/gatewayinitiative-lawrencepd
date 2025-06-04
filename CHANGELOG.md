@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.3] - 2025-06-04  
+### Added  
+- Created a new script section in `clean_csv.ipynb` to filter out rows with latitude and longitude coordinates not located within Massachusetts.  
+  - Exported the filtered dataset to a new file: `checkpoint8_mass_filtered.csv`.  
+
+### Changed  
+- Updated `.gitignore` to exclude:  
+  - `*.pdf`, `*.csv`, `notes.ipynb`, and `cache/` directory.  
+
+- Updated `requirements.txt` to include spatial analysis and mapping libraries:  
+  - `geopandas`, `networkx`, `osmnx`, `pyogrio`, `pyproj`, `scipy`, and `shapely`.  
+
+### Notes  
+- This update improves data accuracy by ensuring that only incidents occurring within Massachusetts are retained.  
+- Added geospatial validation to enhance trustworthiness of further visualizations and crime trend analysis.  
+
 ## [0.2.2] - 2025-04-27  
 ### Changed  
 - Updated `categorize_visualizations.ipynb` to load from `checkpoint5_hashed.csv` instead of `checkpoint2_geocoded.csv` at the start of the notebook.
