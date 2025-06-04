@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed  
 - Updated `.gitignore` to exclude:  
-  - `*.pdf`, `*.csv`, `notes.ipynb`, and `cache/` directory.  
+  -  `cache`  
 
 - Updated `requirements.txt` to include spatial analysis and mapping libraries:  
   - `geopandas`, `networkx`, `osmnx`, `pyogrio`, `pyproj`, `scipy`, and `shapely`.  
