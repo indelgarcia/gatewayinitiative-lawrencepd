@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.4] - 2025-06-12  
+### Added  
+- Introduced a new Streamlit page at `pages/TableauDashboard.py` to embed a Tableau public dashboard for visualizing Lawrence PD data.  
+  - Custom HTML integration allows scaled rendering and improved layout control.  
+  - Embedded URL: `https://public.tableau.com/views/LawrencePDPublicData/Dashboard4`.  
+
+### Notes  
+- The initial creation and configuration of the `streamlit_app.py` main app file was made by Ritika in a prior version at May 19, 2025 but was not tracked in earlier changelog entries.
+  - It includes the app entry point, base layout configuration, and loading of geospatial boundaries for Lawrence.  
+
 ## [0.2.3] - 2025-06-04  
 ### Added  
 - Created a new script section in `clean_csv.ipynb` to filter out rows with latitude and longitude coordinates not located within Massachusetts.  
