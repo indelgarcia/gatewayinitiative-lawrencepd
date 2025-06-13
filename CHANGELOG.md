@@ -10,7 +10,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added  
 - Introduced a new Streamlit page at `pages/TableauDashboard.py` to embed a Tableau public dashboard for visualizing Lawrence PD data.  
   - Custom HTML integration allows scaled rendering and improved layout control.  
-  - Embedded URL: `https://public.tableau.com/views/LawrencePDPublicData/Dashboard4`.  
+  - Embedded URL: `https://public.tableau.com/views/LawrencePDPublicData/Dashboard4`. 
+
+  - Added a new section in `convert_pdfs.py` to parse and convert 2023–2024 PDF reports into a single structured CSV file.  
+  - Calls `parse_all_pdfs_to_csv(PDF_DATA_DIR, parsed_csv_path)` with updated input/output paths.  
+  - Dynamically constructs directory paths using `os.getcwd()` for compatibility across systems.
+
+- Added a new section in `download_pdfs.ipynb` to include logic for downloading 2023 and 2024 incident report PDFs.  
+  - Filters files using a regex pattern matching MM-DD-2023.pdf and MM-DD-2024.pdf.  
+  - Automatically organizes PDFs into subfolders by year and month (e.g., 2023_january, 2024_march).  
+  - Prints progress updates every 500 documents to track batch progress.  
+  - Skips invalid or non-PDF files based on response headers and filename format. 
 
 ### Notes  
 - The initial creation and configuration of the `streamlit_app.py` main app file was made by Ritika in a prior version at May 19, 2025 but was not tracked in earlier changelog entries.
