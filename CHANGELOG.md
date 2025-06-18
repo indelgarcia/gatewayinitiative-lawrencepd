@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.5] - 2025-06-18  
+### Changed
+- Updated `convert_pdfs.py` to handle retrieve years 2023 and 2024.  
+- Updated `download_pdfs.ipynb` to download incident report PDFs for 2023 and 2024 using Tesseract and pdfplumber
+- Updated both scripts to also scrape and download incident reports from 2018-2024
+
+### Notes
+- There was major data (incidents) missing from 2023-2024 due to the scanned pdfs not being read properly. This new approach uses Tesseract OCR and pdfplumber to extract text from the PDFs, which should improve data completeness and accuracy.
+- 2018-2023 was included to be comprehensive
+
 ## [0.2.4] - 2025-06-12  
 ### Added  
 - Introduced a new Streamlit page at `pages/TableauDashboard.py` to embed a Tableau public dashboard for visualizing Lawrence PD data.  
