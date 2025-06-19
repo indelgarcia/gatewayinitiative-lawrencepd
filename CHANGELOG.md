@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 - Updated `clean_pdfs.ipynb` to handle retrieve new merged CSV file for 2018-2024 incident reports.
 - Added code to handle any new transformations that wasn't in the previous csv file.
+- Moved geocoding "Mass check" to geocode_part2.ipynb
 
 ## [0.2.5] - 2025-06-18  
 ### Changed
