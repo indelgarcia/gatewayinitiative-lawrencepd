@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.6] - 2025-06-19
+### Changed
+- Updated `clean_pdfs.ipynb` to handle retrieve new merged CSV file for 2018-2024 incident reports.
+- Added code to handle any new transformations that wasn't in the previous csv file.
+
 ## [0.2.5] - 2025-06-18  
 ### Changed
-- Updated `convert_pdfs.py` to handle retrieve years 2023 and 2024.  
+- Updated `convert_pdfs.ipynb` to handle retrieve years 2023 and 2024.  
 - Updated `download_pdfs.ipynb` to download incident report PDFs for 2023 and 2024 using Tesseract and pdfplumber
 - Updated both scripts to also scrape and download incident reports from 2018-2024
 
@@ -22,7 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   - Custom HTML integration allows scaled rendering and improved layout control.  
   - Embedded URL: `https://public.tableau.com/views/LawrencePDPublicData/Dashboard4`. 
 
-  - Added a new section in `convert_pdfs.py` to parse and convert 2023–2024 PDF reports into a single structured CSV file.  
+  - Added a new section in `convert_pdfs.ipynb` to parse and convert 2023–2024 PDF reports into a single structured CSV file.  
   - Calls `parse_all_pdfs_to_csv(PDF_DATA_DIR, parsed_csv_path)` with updated input/output paths.  
   - Dynamically constructs directory paths using `os.getcwd()` for compatibility across systems.
 
