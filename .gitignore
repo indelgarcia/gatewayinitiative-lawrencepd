@@ -2,3 +2,4 @@
 *.csv
 notes.ipynb
 cache
+config.json

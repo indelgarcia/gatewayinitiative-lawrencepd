@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.7] - 2025-06-20
+### Added
+- Created new notebook `address_mapping.ipynb` to geocode addresses using OpenCage API and OpenStreetMap.
+- Added full address cleaning logic to normalize address formats and handle variations
+- Implemented multiple geocoding passes to overcome OpenCage daily free request limits. Final iteration includes optimized and cleaner geocoding code.
+- Merged multiple geocode result files into one consolidated and deduplicated file.
+- Added additional logic to fill missing latitude and longitude values after merging.
+- Integrated `config.json` file for securely storing API keys and updated `.gitignore` to exclude this file.
+
+### Notes
+- Original code for `address_mapping.ipynb` was provided by Ritika Pandey with file directory adjustments and API key handling and optimizations added by Indel.
+
 ## [0.2.6] - 2025-06-19
 ### Changed
 - Updated `clean_pdfs.ipynb` to handle retrieve new merged CSV file for 2018-2024 incident reports.
