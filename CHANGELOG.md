@@ -7,6 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [Unreleased]
 
 ## [0.2.9] - 2025-06-26
+
+### Added
+- Added logic to filter out year 2025 from the dataset in `clean_csv.ipynb` 
+
 ### Changed
 - Updated and refactor `hash.ipynb` to work with the latest checkpoint files.
 
