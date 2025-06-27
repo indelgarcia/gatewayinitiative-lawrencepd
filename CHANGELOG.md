@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.9] - 2025-06-26
+### Changed
+- Updated and refactor `hash.ipynb` to work with the latest checkpoint files.
+
 ## [0.2.8] - 2025-06-25
 ### Changed
 - Changed `geocode_part2.ipynb` to `geocode_merge.ipynb` to better reflect its purpose of merging geocode data with checkpoints.
