@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.2.8] - 2025-06-25
+### Changed
+- Changed `geocode_part2.ipynb` to `geocode_merge.ipynb` to better reflect its purpose of merging geocode data with checkpoints.
+
+### Added
+- Added a new section in `geocode_merge.ipynb` to handle merging geocoded latitude and longitude data with the existing `checkpoint2`
+
+### Removed
+- Removed the `Location` cleanup logic from `clean_csv.ipynb` as it is now handled in `geocode_merge.ipynb`.
+
 ## [0.2.7] - 2025-06-20
 ### Added
 - Created new notebook `address_mapping.ipynb` to geocode addresses using OpenCage API and OpenStreetMap.
