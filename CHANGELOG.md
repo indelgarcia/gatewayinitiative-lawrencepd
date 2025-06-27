@@ -9,14 +9,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ## [0.2.9] - 2025-06-26
 
 ### Added
-- Added logic to filter out year 2025 from the dataset in `clean_csv.ipynb` 
+- Added logic to filter out year 2025 from the dataset in `clean_csv.ipynb`
+- Made most recent checkpoint visible/public via gitignore command
 
 ### Changed
-- Updated and refactor `hash.ipynb` to work with the latest checkpoint files.
+- Updated and refactor `hash.ipynb` to work with the latest checkpoint files (cp9).
 
 - Updated and refactored 'categorize_visualizations.ipynb' to work with the latest checkpoint files.
 
 - Updated `geocode_merge.ipynb` to work with the latest checkpoint files and ensure compatibility with the new geocoding logic.
+
+- made streamlit app compatible with the latest checkpoint file (cp9)
+- updated tableau dashboard to reflect the latest checkpoint file (cp9)
 
 ## [0.2.8] - 2025-06-25
 ### Changed

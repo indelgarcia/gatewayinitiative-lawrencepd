@@ -32,9 +32,9 @@ lawrence_geojson = load_lawrence_boundary()
 @st.cache_data
 def load_data():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(script_dir, "checkpoint7_serious_crimes_subset.csv")
+    file_path = os.path.join(script_dir, "checkpoint9_no_2025.csv")
     df = pd.read_csv(file_path)
-    data = df[['Latitude', 'Longitude', 'category', 'crime_severity', 'Incident #', 'Date']].dropna()
+    data = df[['latitude', 'longitude', 'category', 'crime_severity', 'Incident #', 'Date']].dropna()
     data['Date'] = pd.to_datetime(data['Date'])
     data['year'] = data['Date'].dt.year
     return data
@@ -75,7 +75,7 @@ else:
                          (data['year'].isin(selected_year))]
 
 
-filtered_data = filtered_data.dropna(subset=['Latitude', 'Longitude'])
+filtered_data = filtered_data.dropna(subset=['latitude', 'longitude'])
 if serious_crime_filter == "Serious Only":
     filtered_data = filtered_data[filtered_data['crime_severity'] == 'Serious']
 elif serious_crime_filter == "Non-Serious Only":
@@ -102,11 +102,11 @@ if not filtered_data.empty:
     }).add_to(m)
     if heatmap_enabled:
         #  Add Heatmap
-        heat_data = filtered_data[['Latitude', 'Longitude']].dropna()
-        heat_data = heat_data[(heat_data['Latitude'].apply(lambda x: isinstance(x, (float, int)))) &
-                            (heat_data['Longitude'].apply(lambda x: isinstance(x, (float, int))))]
+        heat_data = filtered_data[['latitude', 'longitude']].dropna()
+        heat_data = heat_data[(heat_data['latitude'].apply(lambda x: isinstance(x, (float, int)))) &
+                            (heat_data['longitude'].apply(lambda x: isinstance(x, (float, int))))]
 
-        heat_list = heat_data[['Latitude', 'Longitude']].values.tolist()
+        heat_list = heat_data[['latitude', 'longitude']].values.tolist()
 
         if heat_list:
             HeatMap(heat_list).add_to(m)
@@ -122,7 +122,7 @@ if not filtered_data.empty:
         for _, row in filtered_data.iterrows():
             popup_text = f"{row['Date']}<br>{row['category']}"
             folium.CircleMarker(
-                location=(row['Latitude'], row['Longitude']),
+                location=(row['latitude'], row['longitude']),
                 radius=8,
                 color="crimson",
                 fill=True,
@@ -133,7 +133,7 @@ if not filtered_data.empty:
 
     # for _, row in filtered_data.iterrows():
     #     folium.Marker(
-    #         location=[row['Latitude'], row['Longitude']],
+    #         location=[row['latitude'], row['longitude']],
     #         popup=f"{row['category']}<br>{row['Date']}",
     #         icon=folium.Icon(color='blue')
     #     ).add_to(marker_cluster)
