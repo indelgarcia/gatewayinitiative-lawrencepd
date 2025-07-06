@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 - New notebook, `date_check.ipynb`, to check for missing dates in the dataset.
 - Manually downloaded the missing dates PDFs from the Lawrence PD website
+- Added logic to combine the missing dates dataset with the main dataset in
 
 - Added logic to `convert_pdfs.ipynb` to handle the the missing dates PDFs.\
 
