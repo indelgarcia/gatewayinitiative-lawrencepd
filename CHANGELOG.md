@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-07-06
+### Added
+- New notebook, `date_check.ipynb`, to check for missing dates in the dataset.
+- Mannually downloaded the missing dates PDFs from the Lawrence PD website
+
 ## [0.2.9] - 2025-06-26
 
 ### Added
