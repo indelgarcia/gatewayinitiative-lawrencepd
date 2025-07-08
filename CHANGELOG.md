@@ -10,6 +10,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Updated
 - plugged in the latest checkpoint file `checkpoint10_combined_data.csv` into the Streamlit app.
 
+### Removed
+- Removed checkpoint 9 from tracking.
+
 ## [0.3.1] - 2025-07-07
 ### Updated
 - Bug fix in `date_check.ipynb` to ensure the date column concatenation works correctly.
