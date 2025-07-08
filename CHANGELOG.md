@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.1] - 2025-07-07
+### Updated
+- Bug fix in `date_check.ipynb` to ensure the date column concatenation works correctly.
+
 ## [0.3.0] - 2025-07-06
 ### Added
 - New notebook, `date_check.ipynb`, to check for missing dates in the dataset.
