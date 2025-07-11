@@ -21,7 +21,7 @@ st.title("Lawrence Police Daily Logs")
 @st.cache_data
 def load_lawrence_boundary():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(script_dir, "lawrence_boundary.geojson")
+    file_path = os.path.join(script_dir, "boundaries", "lawrence_boundary.geojson")
     with open(file_path, "r") as f:
         lawrence_geojson = json.load(f)
         return lawrence_geojson
@@ -63,6 +63,10 @@ with st.sidebar:
     ["All", "Serious Only", "Non-Serious Only"])
     heatmap_enabled = st.sidebar.checkbox("Show Heatmap", value=False)
 
+    # poverty data layer checkbox
+    poverty_layer_enabled = st.sidebar.checkbox("Show Poverty Data Layer", value=False)
+
+
 
 # -----------------------------
 # 🧹 FILTER DATA
@@ -89,35 +93,56 @@ st.markdown(f"### 🗓️ {selected_year} | {len(filtered_data)} incident(s) sho
 # 🗺️ CREATE MAP
 # -----------------------------
 if not filtered_data.empty:
-    m = folium.Map(location=[42.707, -71.163], zoom_start=14)#, tiles="CartoDB positron")
-    
-    # Add the boundary to the map
+    m = folium.Map(location=[42.707, -71.163], zoom_start=14)
+
+    # Add Lawrence city boundary
     folium.GeoJson(
         lawrence_geojson,
         name="Lawrence Border",
         style_function=lambda x: {
-        'color': 'red',
-        'weight': 2,
-        'fillOpacity': 0
-    }).add_to(m)
+            'color': 'red',
+            'weight': 2,
+            'fillOpacity': 0
+        }
+    ).add_to(m)
+
+    # Add Poverty Choropleth Layer (Toggleable)
+    if poverty_layer_enabled:
+        poverty_path = os.path.join(os.path.dirname(__file__), "boundaries", "poverty_boundary.geojson")
+        with open(poverty_path, "r") as f:
+            poverty_data = json.load(f)
+
+        # Extract (tract, estimate) pairs
+        choropleth_data = []
+        for feature in poverty_data["features"]:
+            tract = feature["properties"].get("tract")
+            estimate = feature["properties"].get("Estimate")
+            if tract and estimate:
+                choropleth_data.append([tract, estimate])
+
+        folium.Choropleth(
+            geo_data=poverty_data,
+            name="Poverty Index",
+            data=choropleth_data,
+            columns=["tract", "Estimate"],
+            key_on="feature.properties.tract",
+            fill_color="OrRd",
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            legend_name="Poverty Estimate"
+        ).add_to(m)
+
+    # Add Heatmap or Clustered Markers
     if heatmap_enabled:
-        #  Add Heatmap
         heat_data = filtered_data[['latitude', 'longitude']].dropna()
-        heat_data = heat_data[(heat_data['latitude'].apply(lambda x: isinstance(x, (float, int)))) &
-                            (heat_data['longitude'].apply(lambda x: isinstance(x, (float, int))))]
-
+        heat_data = heat_data[
+            (heat_data['latitude'].apply(lambda x: isinstance(x, (float, int)))) &
+            (heat_data['longitude'].apply(lambda x: isinstance(x, (float, int))))
+        ]
         heat_list = heat_data[['latitude', 'longitude']].values.tolist()
-
         if heat_list:
             HeatMap(heat_list).add_to(m)
     else:
-    #     style_function=lambda x: {
-    #         "fillColor": "#00000000",  # Transparent fill
-    #         "color": "red",            # Red outline
-    #         "weight": 3,
-    #         "dashArray": "5, 5"
-    #     }
-    # ).add_to(m)
         marker_cluster = MarkerCluster().add_to(m)
         for _, row in filtered_data.iterrows():
             popup_text = f"{row['Date']}<br>{row['category']}"
@@ -129,17 +154,12 @@ if not filtered_data.empty:
                 fill_opacity=0.7,
                 popup=popup_text
             ).add_to(marker_cluster)
-        
 
-    # for _, row in filtered_data.iterrows():
-    #     folium.Marker(
-    #         location=[row['latitude'], row['longitude']],
-    #         popup=f"{row['category']}<br>{row['Date']}",
-    #         icon=folium.Icon(color='blue')
-    #     ).add_to(marker_cluster)
+    # Add Layer Control (for toggling on/off the choropleth)
+    folium.LayerControl().add_to(m)
 
+    # Render the map in Streamlit
     st_data = st_folium(m, width=2000, height=800)
 
 else:
     st.warning("No data to display on the map for the selected filters.")
-

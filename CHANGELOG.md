@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.3] - 2025-07-11
+### Added
+- `geopandas_poverty.ipynb` notebook to use the US Census Bureau's poverty data to create a choropleth map of poverty levels in Lawrence, MA
+- Organized a new folder structure for secondary data in the data directory
+- Organized a new folder structure for boundaries in the streamlit app
+- added the resulting GeoJSON file `poverty_boundary.geojson` to the `boundaries` directory
+
+### Changed
+- Updated `streamlit_app.py` 
+  - to load existing lawrence boundary from the new boundaries directory
+  - to load the poverty choropleth layer from the new boundaries directory
+
+
 ## [0.3.2] - 2025-07-08
 ### Updated
 - plugged in the latest checkpoint file `checkpoint10_combined_data.csv` into the Streamlit app.
