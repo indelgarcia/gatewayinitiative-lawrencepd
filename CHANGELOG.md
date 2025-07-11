@@ -13,10 +13,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 - Organized a new folder structure for boundaries in the streamlit app
 - added the resulting GeoJSON file `poverty_boundary.geojson` to the `boundaries` directory
 
-### Changed
+### Updated
 - Updated `streamlit_app.py` 
   - to load existing lawrence boundary from the new boundaries directory
   - to load the poverty choropleth layer from the new boundaries directory
+  - Making CP 10 publicly available via gitignore command
 
 
 ## [0.3.2] - 2025-07-08
