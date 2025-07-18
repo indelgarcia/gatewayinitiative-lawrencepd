@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.4] - 2025-07-17
+### Updated
+- Updated `geopandas_poverty.ipynb` to include a new section that loads the poverty on below poverty line data from the US Census Bureau and merges it with the Lawrence boundary data.
+- Replaced the resulting GeoDataFrame with the merged data in the `poverty_boundary.geojson` file.
+
+### Added
+- Added a prototype function to automate the cleaning of the lawrence boundary data in `geopandas_poverty.ipynb`. This function will be used to clean the boundary data in future iterations.
+
 ## [0.3.3] - 2025-07-11
 ### Added
 - `geopandas_poverty.ipynb` notebook to use the US Census Bureau's poverty data to create a choropleth map of poverty levels in Lawrence, MA

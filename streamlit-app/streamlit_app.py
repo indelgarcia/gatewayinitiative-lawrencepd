@@ -112,13 +112,15 @@ if not filtered_data.empty:
         with open(poverty_path, "r") as f:
             poverty_data = json.load(f)
 
-        # Extract (tract, estimate) pairs
-        choropleth_data = []
-        for feature in poverty_data["features"]:
-            tract = feature["properties"].get("tract")
-            estimate = feature["properties"].get("Estimate")
-            if tract and estimate:
-                choropleth_data.append([tract, estimate])
+        # convert choropleth_data to a df, better runtime performance than lists of lists
+        choropleth_data = pd.DataFrame([
+            {
+                "tract": feature["properties"].get("tract"),
+                "Estimate": feature["properties"].get("Estimate")
+            }
+            for feature in poverty_data["features"]
+            if feature["properties"].get("tract") and feature["properties"].get("Estimate") is not None
+        ])
 
         folium.Choropleth(
             geo_data=poverty_data,
