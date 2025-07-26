@@ -93,7 +93,17 @@ st.markdown(f"### 🗓️ {selected_year} | {len(filtered_data)} incident(s) sho
 # 🗺️ CREATE MAP
 # -----------------------------
 if not filtered_data.empty:
-    m = folium.Map(location=[42.707, -71.163], zoom_start=14)
+    m = folium.Map(location=[42.707, -71.163], zoom_start=14, control_scale=True)
+
+    # Add extra padding around map
+    m.get_root().html.add_child(folium.Element("""
+        <style>
+        .leaflet-bottom.leaflet-right {
+            margin-bottom: 40px;
+            margin-right: 40px;
+        }
+        </style>
+    """))
 
     # Add Lawrence city boundary
     folium.GeoJson(
@@ -122,6 +132,30 @@ if not filtered_data.empty:
             if feature["properties"].get("tract") and feature["properties"].get("Estimate") is not None
         ])
 
+        import branca.colormap as cm
+
+        # Ensure Estimate is float and already in percent form
+        choropleth_data["Estimate"] = choropleth_data["Estimate"].astype(float)
+
+        min_val = choropleth_data["Estimate"].min()
+        max_val = choropleth_data["Estimate"].max()
+
+        # Define red-themed percentage bins similar to Census site
+        bins = [0, 8, 15.6, 20.3, 28.4, 36.7]
+        if max_val > 36.7:
+            bins.append(max_val)
+        else:
+            bins.append(40)
+
+        colormap = cm.StepColormap(
+            colors=["#fee5d9", "#fcbba1", "#fc9272", "#fb6a4a", "#de2d26", "#a50f15"],
+            index=bins,
+            vmin=min_val,
+            vmax=max_val,
+            caption="Percent Below Poverty Line (%)"
+        )
+        colormap.add_to(m)
+        
         folium.Choropleth(
             geo_data=poverty_data,
             name="Poverty Index",

@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.5] - 2025-07-25
+### Updated
+- steamlit_app.py to add legend to povery choropleth map
 ## [0.3.4] - 2025-07-17
 ### Updated
 - Updated `geopandas_poverty.ipynb` to include a new section that loads the poverty on below poverty line data from the US Census Bureau and merges it with the Lawrence boundary data.
