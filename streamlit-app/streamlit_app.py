@@ -61,10 +61,10 @@ with st.sidebar:
     serious_crime_filter = st.selectbox(
     "🚨 Filter by Serious Crime",
     ["All", "Serious Only", "Non-Serious Only"])
-    heatmap_enabled = st.sidebar.checkbox("Show Heatmap", value=False)
+    heatmap_enabled = st.sidebar.toggle("Show Heatmap", value=False)
 
     # poverty data layer checkbox
-    poverty_layer_enabled = st.sidebar.checkbox("Show Poverty Data Layer", value=False)
+    poverty_layer_enabled = st.sidebar.toggle("Show Poverty Data Layer", value=False)
 
 
 

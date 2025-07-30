@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.7] - 2025-07-30
+### Updated
+- Updated `streamlit_app.py` to add toggle instead of checkbox for heatmap and poverty layer visibility.
+
 ## [0.3.6] - 2025-07-30
 ### Updated
 - streamlit_app.py to fix the legend
