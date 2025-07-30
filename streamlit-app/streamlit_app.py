@@ -99,8 +99,8 @@ if not filtered_data.empty:
     m.get_root().html.add_child(folium.Element("""
         <style>
         .leaflet-bottom.leaflet-right {
-            margin-bottom: 40px;
-            margin-right: 40px;
+            margin-bottom: 10px;
+            margin-right: 10px;
         }
         </style>
     """))
@@ -132,29 +132,22 @@ if not filtered_data.empty:
             if feature["properties"].get("tract") and feature["properties"].get("Estimate") is not None
         ])
 
-        import branca.colormap as cm
-
-        # Ensure Estimate is float and already in percent form
-        choropleth_data["Estimate"] = choropleth_data["Estimate"].astype(float)
-
-        min_val = choropleth_data["Estimate"].min()
-        max_val = choropleth_data["Estimate"].max()
-
-        # Define red-themed percentage bins similar to Census site
-        bins = [0, 8, 15.6, 20.3, 28.4, 36.7]
-        if max_val > 36.7:
-            bins.append(max_val)
-        else:
-            bins.append(40)
-
-        colormap = cm.StepColormap(
-            colors=["#fee5d9", "#fcbba1", "#fc9272", "#fb6a4a", "#de2d26", "#a50f15"],
-            index=bins,
-            vmin=min_val,
-            vmax=max_val,
-            caption="Percent Below Poverty Line (%)"
-        )
-        colormap.add_to(m)
+        m.get_root().html.add_child(folium.Element("""
+            <style>
+                .legend {
+                    position: fixed !important;
+                    top: 45px !important;
+                    right: 25px !important;
+                    z-index: 9999;
+                    background-color: white;
+                    padding: 2px;
+                    border: 2px solid grey;
+                    border-radius: 4px;
+                    box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+                    max-width: 250px;
+                }
+            </style>
+        """))
         
         folium.Choropleth(
             geo_data=poverty_data,
@@ -165,7 +158,7 @@ if not filtered_data.empty:
             fill_color="OrRd",
             fill_opacity=0.7,
             line_opacity=0.2,
-            legend_name="Poverty Estimate"
+            legend_name="Percent Below Poverty Line (%)",
         ).add_to(m)
 
     # Add Heatmap or Clustered Markers
