@@ -131,23 +131,6 @@ if not filtered_data.empty:
             for feature in poverty_data["features"]
             if feature["properties"].get("tract") and feature["properties"].get("Estimate") is not None
         ])
-
-        m.get_root().html.add_child(folium.Element("""
-            <style>
-                .legend {
-                    position: fixed !important;
-                    top: 45px !important;
-                    right: 25px !important;
-                    z-index: 9999;
-                    background-color: white;
-                    padding: 2px;
-                    border: 2px solid grey;
-                    border-radius: 4px;
-                    box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
-                    max-width: 250px;
-                }
-            </style>
-        """))
         
         folium.Choropleth(
             geo_data=poverty_data,
@@ -160,6 +143,36 @@ if not filtered_data.empty:
             line_opacity=0.2,
             legend_name="Percent Below Poverty Line (%)",
         ).add_to(m)
+
+        # -----------------------------
+        # 🧾 ADD CUSTOM POVERTY LEGEND
+        # -----------------------------
+        legend_html = """
+        <div style="
+            position: fixed; 
+            bottom: 40px; 
+            left: 40px; 
+            z-index:9999; 
+            background-color: white; 
+            padding: 10px; 
+            border:2px solid gray; 
+            border-radius: 5px;
+            font-size: 14px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        ">
+            <strong style="color: black;">Poverty Estimate (%)</strong><br>
+            <span style="color: black;">
+                <i style="background:#fff5eb;width:20px;height:10px;display:inline-block;"></i> 0–8%<br>
+                <i style="background:#fcbba1;width:20px;height:10px;display:inline-block;"></i> 8–15.6%<br>
+                <i style="background:#fc9272;width:20px;height:10px;display:inline-block;"></i> 15.6–20.3%<br>
+                <i style="background:#fb6a4a;width:20px;height:10px;display:inline-block;"></i> 20.3–28.4%<br>
+                <i style="background:#de2d26;width:20px;height:10px;display:inline-block;"></i> 28.4–36.7%<br>
+                <i style="background:#a50f15;width:20px;height:10px;display:inline-block;"></i> 36.7%+
+            </span>
+        </div>
+        """
+
+        m.get_root().html.add_child(folium.Element(legend_html))
 
     # Add Heatmap or Clustered Markers
     if heatmap_enabled:

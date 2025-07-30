@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.6] - 2025-07-30
+### Updated
+- streamlit_app.py to fix the legend
+
 ## [0.3.5] - 2025-07-25
 ### Updated
 - steamlit_app.py to add legend to povery choropleth map
