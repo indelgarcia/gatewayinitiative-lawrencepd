@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.8] - 2025-07-31
+### Added
+- `liquor_retail.ipynb` to clean, transform and map the liquor retail locations in Lawrence, MA
+- `liquor_license_map_by_type.html` to draft a visualization liquor retail locations by type
+
 ## [0.3.7] - 2025-07-30
 ### Updated
 - Updated `streamlit_app.py` to add toggle instead of checkbox for heatmap and poverty layer visibility.
