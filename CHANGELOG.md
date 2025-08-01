@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.3.9] - 2025-07-31
+### Updated
+- `streamlit_app.py`
+  1. load liquor secondary data
+  2. include a Point of Interest (POI) toggle and multiselect
+  3. and dynamic legend for the POI markers
+
 ## [0.3.8] - 2025-07-31
 ### Added
 - `liquor_retail.ipynb` to clean, transform and map the liquor retail locations in Lawrence, MA

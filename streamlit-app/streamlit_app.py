@@ -40,6 +40,15 @@ def load_data():
     return data
 
 data = load_data()
+# -----------------------------
+# 🍺 LOAD LIQUOR RETAIL DATA
+# -----------------------------
+@st.cache_data
+def load_liquor_data():
+    csv_path = os.path.join(os.path.dirname(__file__), "liquor_retail_geocoded.csv")
+    return pd.read_csv(csv_path).dropna(subset=["latitude", "longitude"])
+
+liquor_df = load_liquor_data()
 
 
 incident_types = ["All"] + sorted(data['category'].dropna().unique())
@@ -61,12 +70,29 @@ with st.sidebar:
     serious_crime_filter = st.selectbox(
     "🚨 Filter by Serious Crime",
     ["All", "Serious Only", "Non-Serious Only"])
+    # -----------------------------
+    # Heatmap Toggle
+    # -----------------------------
     heatmap_enabled = st.sidebar.toggle("Show Heatmap", value=False)
 
-    # poverty data layer checkbox
+    # -----------------------------
+    # Poverty Toggle
+    # -----------------------------
     poverty_layer_enabled = st.sidebar.toggle("Show Poverty Data Layer", value=False)
 
+    # -----------------------------
+    # 🗺️ POI Toggle and Category Filters
+    # -----------------------------
+    show_poi = st.toggle("Show Points of Interest", value=False)
 
+    selected_poi_types = []
+    if show_poi:
+        poi_types = [
+            "Restaurant", "Liquor Store", "Bar or Lounge",
+            "Nightclub", "Grocery Store w/ Liquor",
+            "Convenience Store", "Social Club"
+        ]
+        selected_poi_types = st.multiselect("Choose POI Types:", poi_types, default=["Nightclub", "Liquor Store"])
 
 # -----------------------------
 # 🧹 FILTER DATA
@@ -173,6 +199,73 @@ if not filtered_data.empty:
         """
 
         m.get_root().html.add_child(folium.Element(legend_html))
+
+    # -----------------------------
+    # 🧼 POI Marker Colors by Type
+    # -----------------------------
+    type_colors = {
+        "Restaurant": "red",
+        "Liquor Store": "darkgreen",
+        "Bar or Lounge": "blue",
+        "Nightclub": "black",
+        "Grocery Store w/ Liquor": "green",
+        "Convenience Store": "purple",
+        "Social Club": "orange"
+    }
+
+    # -----------------------------
+    # 📍 Add POI Markers to Map
+    # -----------------------------
+    if show_poi and selected_poi_types:
+        for poi_type in selected_poi_types:
+            df = liquor_df[liquor_df["TYPE"] == poi_type]
+            for _, row in df.iterrows():
+                folium.Marker(
+                    location=[row["latitude"], row["longitude"]],
+                    popup=f'{row["NAME"]} ({poi_type})',
+                    tooltip=row["NAME"],
+                    icon=folium.Icon(color=type_colors.get(poi_type, "gray"), icon="info-sign")
+                ).add_to(m)
+    
+    # -----------------------------
+    # 🧾 POI Legend
+    # -----------------------------
+    poi_legend_items = {
+        "Restaurant": "red",
+        "Liquor Store": "darkgreen",
+        "Bar or Lounge": "blue",
+        "Nightclub": "black",
+        "Grocery Store w/ Liquor": "green",
+        "Convenience Store": "purple",
+        "Social Club": "orange"
+    }
+
+    legend_lines = ["<b>POI Legend</b><br>"]
+    for poi_type in selected_poi_types:
+        color = poi_legend_items.get(poi_type, "gray")
+        legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+
+    poi_legend_html = f"""
+    <div style="
+        position: fixed;
+        bottom: 220px;
+        left: 40px;
+        width: 280px;
+        background-color: white;
+        border:2px solid gray;
+        border-radius: 5px;
+        z-index:9999;
+        font-size:14px;
+        padding: 10px;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    ">
+    <span style="color:black;">
+    {''.join(legend_lines)}
+    </span>
+    </div>
+    """
+
+    m.get_root().html.add_child(folium.Element(poi_legend_html))
 
     # Add Heatmap or Clustered Markers
     if heatmap_enabled:

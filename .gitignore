@@ -4,3 +4,5 @@ notes.ipynb
 cache
 config.json
 !checkpoint10_combined_data.csv
+!liquor_retail_geocoded.csv
+tl_2024_25_tract
