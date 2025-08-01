@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.4.0] - 2025-08-01
+### Updated
+- `streamlit_app.py` to 
+  1. Replace wording to say "Note: Liquor vendors only" for POI
+  2. Change POI icons to be more representative of the type of liquor vendor   and add icons to the POI legend
+  3. Include "All" button in POI Type filter
+  4. Refactor + Comments 
+
 ## [0.3.9] - 2025-07-31
 ### Updated
 - `streamlit_app.py`

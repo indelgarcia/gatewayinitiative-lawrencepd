@@ -88,11 +88,20 @@ with st.sidebar:
     selected_poi_types = []
     if show_poi:
         poi_types = [
-            "Restaurant", "Liquor Store", "Bar or Lounge",
-            "Nightclub", "Grocery Store w/ Liquor",
-            "Convenience Store", "Social Club"
+            "All", "Bar or Lounge", "Convenience Store", 
+            "Grocery Store w/ Liquor", "Liquor Store", 
+            "Nightclub", "Restaurant", "Social Club"
         ]
-        selected_poi_types = st.multiselect("Choose POI Types:", poi_types, default=["Nightclub", "Liquor Store"])
+        poi_types_with_all = ["All"] + poi_types
+
+        selected_poi_types = st.multiselect("Choose POI Types (*Note: Liquor vendors only):", poi_types, default=["Nightclub", "Liquor Store", "Bar or Lounge"])
+
+        if "All" in selected_poi_types:
+            selected_poi_types = poi_types
+            selected_poi_types.remove("All")
+        else:
+            selected_poi_types = selected_poi_types
+
 
 # -----------------------------
 # 🧹 FILTER DATA
@@ -199,18 +208,17 @@ if not filtered_data.empty:
         """
 
         m.get_root().html.add_child(folium.Element(legend_html))
-
     # -----------------------------
-    # 🧼 POI Marker Colors by Type
+    # 🧼 Define POI marker style
     # -----------------------------
-    type_colors = {
-        "Restaurant": "red",
-        "Liquor Store": "darkgreen",
-        "Bar or Lounge": "blue",
-        "Nightclub": "black",
-        "Grocery Store w/ Liquor": "green",
-        "Convenience Store": "purple",
-        "Social Club": "orange"
+    poi_style_map = {
+        "Restaurant": {"color": "red", "icon": "cutlery"},
+        "Liquor Store": {"color": "blue", "icon": "shopping-cart"},
+        "Bar or Lounge": {"color": "lightblue", "icon": "glass"},
+        "Nightclub": {"color": "black", "icon": "music"},
+        "Grocery Store w/ Liquor": {"color": "green", "icon": "shopping-cart"},
+        "Convenience Store": {"color": "purple", "icon": "shopping-cart"},
+        "Social Club": {"color": "orange", "icon": "star"}
     }
 
     # -----------------------------
@@ -219,31 +227,30 @@ if not filtered_data.empty:
     if show_poi and selected_poi_types:
         for poi_type in selected_poi_types:
             df = liquor_df[liquor_df["TYPE"] == poi_type]
+            style = poi_style_map.get(poi_type, {"color": "gray", "icon": "info-sign"})
+
             for _, row in df.iterrows():
                 folium.Marker(
                     location=[row["latitude"], row["longitude"]],
                     popup=f'{row["NAME"]} ({poi_type})',
                     tooltip=row["NAME"],
-                    icon=folium.Icon(color=type_colors.get(poi_type, "gray"), icon="info-sign")
+                    icon=folium.Icon(color=style["color"], icon=style["icon"])
                 ).add_to(m)
     
     # -----------------------------
     # 🧾 POI Legend
     # -----------------------------
-    poi_legend_items = {
-        "Restaurant": "red",
-        "Liquor Store": "darkgreen",
-        "Bar or Lounge": "blue",
-        "Nightclub": "black",
-        "Grocery Store w/ Liquor": "green",
-        "Convenience Store": "purple",
-        "Social Club": "orange"
-    }
-
     legend_lines = ["<b>POI Legend</b><br>"]
     for poi_type in selected_poi_types:
-        color = poi_legend_items.get(poi_type, "gray")
-        legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+        style = poi_style_map.get(poi_type, {})
+        color = style.get("color", "gray")
+        icon = style.get("icon", "info-sign")
+
+        if poi_type == "Bar or Lounge":
+            legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+        else:
+            legend_lines.append(f'<i class="fa fa-{icon}" style="color:{color};"></i> {poi_type}<br>')
+            # legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
 
     poi_legend_html = f"""
     <div style="
@@ -266,8 +273,9 @@ if not filtered_data.empty:
     """
 
     m.get_root().html.add_child(folium.Element(poi_legend_html))
-
+    # -----------------------------
     # Add Heatmap or Clustered Markers
+    # -----------------------------
     if heatmap_enabled:
         heat_data = filtered_data[['latitude', 'longitude']].dropna()
         heat_data = heat_data[
