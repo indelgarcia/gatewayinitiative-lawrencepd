@@ -13,7 +13,7 @@ import os
 import json
 
 
-st.set_page_config(page_title="Police Incident Map", layout="wide")
+st.set_page_config(page_title="Lawrence Police Incidents Dashboard", layout="wide")
 
 st.title("Lawrence Police Incidents Dashboard")
 
@@ -149,7 +149,7 @@ with tab3:
             )
             st.markdown("---")
             st.subheader("📌 Incident Categories")
-            selected_incidents = st.multiselect("Choose incidents to view:", incident_types, default="VIOLENT_AND_WEAPON_OFFENSES")
+            selected_incidents = st.multiselect("Choose incidents to view:", incident_types, default="Violent and Weapon Offenses")
             serious_crime_filter = st.selectbox(
             "🚨 Filter by Serious Crime",
             ["All", "Serious Only", "Non-Serious Only"])
