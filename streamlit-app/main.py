@@ -8,7 +8,6 @@ import folium
 from folium.plugins import MarkerCluster, HeatMap
 from streamlit_folium import st_folium
 from pathlib import Path
-from folium.plugins import MarkerCluster
 import os
 import json
 
@@ -42,11 +41,13 @@ tab1, tab2, tab3 = st.tabs(["About the Project", "Data Trends", "Spatial Insight
 # About the Project tab
 with tab1:
     set_tab("## About the Project")
-    st.markdown("""
-    ### About the Project
-    INSERT ABOUT THE PROJECT HERE
-    """)
+    st.markdown(""" 
+                The Lawrence Police Dashboard Project transforms publicly available crime data from the Lawrence Police Department into powerful, interactive visualizations. Designed to serve Gateway Communities, starting with Lawrence, our dashboard reveals crime patterns, trends over time, and geographic hotspots across the city.
 
+Our goal is to make complex crime data accessible and actionable for residents, policymakers, and law enforcement. By integrating additional data like socioeconomic and demographic factors, we provide a deeper understanding of the many influences on public safety—helping the community work together toward safer neighborhoods.
+
+Explore the dashboard to discover detailed insights and support informed decision-making that drives positive change.
+""")
 with tab2:
     set_tab("Data Trends")
     # st.title("📊 Data Trends")
