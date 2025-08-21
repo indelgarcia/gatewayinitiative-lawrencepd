@@ -111,7 +111,7 @@ with tab3:
     @st.cache_data
     def load_data():
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        file_path = os.path.join(script_dir, "checkpoint10_combined_data.csv")
+        file_path = os.path.join(script_dir, "checkpoint11_combined_data.csv")
         df = pd.read_csv(file_path)
         data = df[['latitude', 'longitude', 'category', 'crime_severity', 'Incident #', 'Date']].dropna()
         data['Date'] = pd.to_datetime(data['Date'])

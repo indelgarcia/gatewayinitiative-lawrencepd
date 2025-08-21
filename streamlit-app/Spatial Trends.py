@@ -10,26 +10,69 @@ from pathlib import Path
 from folium.plugins import MarkerCluster
 import os
 import json
+import streamlit.components.v1 as components
 
 
 st.set_page_config(page_title="Police Incident Map", layout="wide")
 
 st.title("Lawrence Police Incidents Dashboard")
 
-# About Project section
-st.markdown("""
-### About the Project
-This interactive dashboard visualizes daily police incident data for Lawrence, MA.  
-Users can explore incidents by type, year, and severity, as well as view points of interest such as liquor stores, restaurants, and nightlife venues.  
+# Tabs
+tab1, tab2, tab3 = st.tabs(["About the Project", "Map Insights", "Tableau Insights"])
 
-**Data Sources:**
-- Lawrence Police Department Daily Logs
-- City of Lawrence Boundaries and Poverty Data
-- Local Points of Interest (Liquor Retail Data)
+# About the Project tab
+with tab1:
+    st.markdown("""
+    ### About the Project
+    INSERT ABOUT THE PROJECT HERE
+    """)
 
-**Purpose:**  
-The dashboard aims to provide insights into spatial and temporal crime patterns in Lawrence, helping residents, researchers, and policymakers understand public safety trends.
-""")
+# Map Insights tab
+with tab2:
+    st.title("📊 Data Trends")
+
+    html_code = """
+    <div style="width: 100%; height: 1000px; position: relative;">
+        <div class='tableauPlaceholder' id='viz1751013203931' style='position: relative; width: 100%; height: 100%;'>
+            <noscript>
+                <a href='#'>
+                    <img alt='Dashboard 1' src='https://public.tableau.com/static/images/La/LawrenceMassachusettsPDDataVisualizer/Dashboard1/1_rss.png' style='border: none; width: 100%; height: auto;' />
+                </a>
+            </noscript>
+            <object class='tableauViz' style='display:none; width: 100%; height: 100%;'>
+                <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                <param name='embed_code_version' value='3' />
+                <param name='site_root' value='' />
+                <param name='name' value='LawrenceMassachusettsPDDataVisualizer/Dashboard1' />
+                <param name='tabs' value='no' />
+                <param name='toolbar' value='yes' />
+                <param name='static_image' value='https://public.tableau.com/static/images/La/LawrenceMassachusettsPDDataVisualizer/Dashboard1/1.png' />
+                <param name='animate_transition' value='yes' />
+                <param name='display_static_image' value='yes' />
+                <param name='display_spinner' value='yes' />
+                <param name='display_overlay' value='yes' />
+                <param name='display_count' value='yes' />
+                <param name='language' value='en-US' />
+            </object>
+        </div>
+        <script type='text/javascript'>
+            var divElement = document.getElementById('viz1751013203931');
+            var vizElement = divElement.getElementsByTagName('object')[0];
+            vizElement.style.width='100%';
+            vizElement.style.height='100%';
+            var scriptElement = document.createElement('script');
+            scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+            vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+    </div>
+    """
+    components.html(html_code, height=700, scrolling=True)
+
+# Tableau Insights tab
+with tab3:
+    st.markdown("### Tableau Insights")
+    st.write("Embedded Tableau dashboard here:")
+   
 
 # -----------------------------
 # 📍 LOAD LAWRENCE BOUNDARY 
