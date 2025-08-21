@@ -14,7 +14,23 @@ import json
 
 st.set_page_config(page_title="Police Incident Map", layout="wide")
 
-st.title("Lawrence Police Daily Logs")
+st.title("Lawrence Police Incidents Dashboard")
+
+# About Project section
+st.markdown("""
+### About the Project
+This interactive dashboard visualizes daily police incident data for Lawrence, MA.  
+Users can explore incidents by type, year, and severity, as well as view points of interest such as liquor stores, restaurants, and nightlife venues.  
+
+**Data Sources:**
+- Lawrence Police Department Daily Logs
+- City of Lawrence Boundaries and Poverty Data
+- Local Points of Interest (Liquor Retail Data)
+
+**Purpose:**  
+The dashboard aims to provide insights into spatial and temporal crime patterns in Lawrence, helping residents, researchers, and policymakers understand public safety trends.
+""")
+
 # -----------------------------
 # 📍 LOAD LAWRENCE BOUNDARY 
 # -----------------------------
@@ -128,7 +144,7 @@ st.markdown(f"### 🗓️ {selected_year} | {len(filtered_data)} incident(s) sho
 # 🗺️ CREATE MAP
 # -----------------------------
 if not filtered_data.empty:
-    m = folium.Map(location=[42.707, -71.163], zoom_start=14, control_scale=True)
+    m = folium.Map(location=[42.707, -71.155], zoom_start=14, control_scale=True)
 
     # Add extra padding around map
     m.get_root().html.add_child(folium.Element("""
@@ -237,42 +253,42 @@ if not filtered_data.empty:
                     icon=folium.Icon(color=style["color"], icon=style["icon"])
                 ).add_to(m)
     
-    # -----------------------------
-    # 🧾 POI Legend
-    # -----------------------------
-    legend_lines = ["<b>POI Legend</b><br>"]
-    for poi_type in selected_poi_types:
-        style = poi_style_map.get(poi_type, {})
-        color = style.get("color", "gray")
-        icon = style.get("icon", "info-sign")
+        # -----------------------------
+        # 🧾 POI Legend
+        # -----------------------------
+        legend_lines = ["<b>POI Legend</b><br>"]
+        for poi_type in selected_poi_types:
+            style = poi_style_map.get(poi_type, {})
+            color = style.get("color", "gray")
+            icon = style.get("icon", "info-sign")
 
-        if poi_type == "Bar or Lounge":
-            legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
-        else:
-            legend_lines.append(f'<i class="fa fa-{icon}" style="color:{color};"></i> {poi_type}<br>')
-            # legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+            if poi_type == "Bar or Lounge":
+                legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+            else:
+                legend_lines.append(f'<i class="fa fa-{icon}" style="color:{color};"></i> {poi_type}<br>')
+                # legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
 
-    poi_legend_html = f"""
-    <div style="
-        position: fixed;
-        bottom: 220px;
-        left: 40px;
-        width: 280px;
-        background-color: white;
-        border:2px solid gray;
-        border-radius: 5px;
-        z-index:9999;
-        font-size:14px;
-        padding: 10px;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-    ">
-    <span style="color:black;">
-    {''.join(legend_lines)}
-    </span>
-    </div>
-    """
+        poi_legend_html = f"""
+        <div style="
+            position: fixed;
+            bottom: 220px;
+            left: 40px;
+            width: 280px;
+            background-color: white;
+            border:2px solid gray;
+            border-radius: 5px;
+            z-index:9999;
+            font-size:14px;
+            padding: 10px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        ">
+        <span style="color:black;">
+        {''.join(legend_lines)}
+        </span>
+        </div>
+        """
 
-    m.get_root().html.add_child(folium.Element(poi_legend_html))
+        m.get_root().html.add_child(folium.Element(poi_legend_html))
     # -----------------------------
     # Add Heatmap or Clustered Markers
     # -----------------------------

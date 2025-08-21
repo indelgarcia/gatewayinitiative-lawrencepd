@@ -1,0 +1,479 @@
+import streamlit as st
+import streamlit.components.v1 as components
+# streamlit_app.py
+import pandas as pd
+import streamlit as st
+import numpy as np
+import folium
+from folium.plugins import MarkerCluster, HeatMap
+from streamlit_folium import st_folium
+from pathlib import Path
+from folium.plugins import MarkerCluster
+import os
+import json
+
+
+st.set_page_config(page_title="Police Incident Map", layout="wide")
+
+st.title("Lawrence Police Incidents Dashboard")
+
+# Initialize active_tab in session_state
+if "active_tab" not in st.session_state:
+    st.session_state.active_tab = "About Project"
+
+# Callback to track tab clicks
+def set_tab(tab_name):
+    st.session_state.active_tab = tab_name
+
+st.markdown(
+    """
+    <style>
+    div[data-testid="stHorizontalBlock"] > div:first-child > div > button > span {
+        font-size: 18px !important;
+        font-weight: 600 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+# Tabs
+tab1, tab2, tab3 = st.tabs(["About the Project", "Data Trends", "Spatial Insights"])
+
+# About the Project tab
+with tab1:
+    set_tab("## About the Project")
+    st.markdown("""
+    ### About the Project
+    INSERT ABOUT THE PROJECT HERE
+    """)
+
+with tab2:
+    set_tab("Data Trends")
+    # st.title("📊 Data Trends")
+
+    html_code = """
+    <div style="width: 100%; height: 1000px; position: relative;">
+        <div class='tableauPlaceholder' id='viz1751013203931' style='position: relative; width: 100%; height: 100%;'>
+            <noscript>
+                <a href='#'>
+                    <img alt='Dashboard 1' src='https://public.tableau.com/static/images/La/LawrenceMassachusettsPDDataVisualizer/Dashboard1/1_rss.png' style='border: none; width: 100%; height: auto;' />
+                </a>
+            </noscript>
+            <object class='tableauViz' style='display:none; width: 100%; height: 100%;'>
+                <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                <param name='embed_code_version' value='3' />
+                <param name='site_root' value='' />
+                <param name='name' value='LawrenceMassachusettsPDDataVisualizer/Dashboard1' />
+                <param name='tabs' value='no' />
+                <param name='toolbar' value='yes' />
+                <param name='static_image' value='https://public.tableau.com/static/images/La/LawrenceMassachusettsPDDataVisualizer/Dashboard1/1.png' />
+                <param name='animate_transition' value='yes' />
+                <param name='display_static_image' value='yes' />
+                <param name='display_spinner' value='yes' />
+                <param name='display_overlay' value='yes' />
+                <param name='display_count' value='yes' />
+                <param name='language' value='en-US' />
+            </object>
+        </div>
+        <script type='text/javascript'>
+            var divElement = document.getElementById('viz1751013203931');
+            var vizElement = divElement.getElementsByTagName('object')[0];
+            vizElement.style.width='100%';
+            vizElement.style.height='100%';
+            var scriptElement = document.createElement('script');
+            scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+            vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+    </div>
+    """
+    components.html(html_code, height=700, scrolling=True)
+
+
+# Map Insights tab
+with tab3:
+    set_tab("Spatial Insights")
+    # -----------------------------
+    # 📍 LOAD LAWRENCE BOUNDARY 
+    # -----------------------------
+    @st.cache_data
+    def load_lawrence_boundary():
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(script_dir, "boundaries", "lawrence_boundary.geojson")
+        with open(file_path, "r") as f:
+            lawrence_geojson = json.load(f)
+            return lawrence_geojson
+    lawrence_geojson = load_lawrence_boundary()
+
+    # -----------------------------
+    # 📊 LOAD DATA
+    # -----------------------------
+
+    @st.cache_data
+    def load_data():
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        file_path = os.path.join(script_dir, "checkpoint10_combined_data.csv")
+        df = pd.read_csv(file_path)
+        data = df[['latitude', 'longitude', 'category', 'crime_severity', 'Incident #', 'Date']].dropna()
+        data['Date'] = pd.to_datetime(data['Date'])
+        data['year'] = data['Date'].dt.year
+        return data
+
+    data = load_data()
+
+    # -----------------------------
+    # 🍺 LOAD LIQUOR RETAIL DATA
+    # -----------------------------
+
+    @st.cache_data
+    def load_liquor_data():
+        csv_path = os.path.join(os.path.dirname(__file__), "liquor_retail_geocoded.csv")
+        return pd.read_csv(csv_path).dropna(subset=["latitude", "longitude"])
+
+    liquor_df = load_liquor_data()
+
+
+    incident_types = ["All"] + sorted(data['category'].dropna().unique())
+
+    # -----------------------------
+    # 🧰 SIDEBAR FILTERS
+    # -----------------------------
+    if st.session_state.active_tab == "Spatial Insights":
+
+        with st.sidebar:
+            st.header("🔍 Filters")
+            # selected_year = st.selectbox("📅 Select Year", sorted(data['year'].unique()))
+            selected_year = st.multiselect(
+            "📅 Select Year(s)",
+            sorted(data['year'].unique().tolist()),
+            default=sorted(data['year'].unique().tolist())  # show all years by default
+            )
+            st.markdown("---")
+            st.subheader("📌 Incident Categories")
+            selected_incidents = st.multiselect("Choose incidents to view:", incident_types, default="VIOLENT_AND_WEAPON_OFFENSES")
+            serious_crime_filter = st.selectbox(
+            "🚨 Filter by Serious Crime",
+            ["All", "Serious Only", "Non-Serious Only"])
+            # -----------------------------
+            # Heatmap Toggle
+            # -----------------------------
+            heatmap_enabled = st.sidebar.toggle("Show Heatmap", value=False)
+
+            # -----------------------------
+            # Poverty Toggle
+            # -----------------------------
+            poverty_layer_enabled = st.sidebar.toggle("Show Poverty Data Layer", value=False)
+
+            # -----------------------------
+            # 🗺️ POI Toggle and Category Filters
+            # -----------------------------
+            show_poi = st.toggle("Show Points of Interest", value=False)
+
+            selected_poi_types = []
+            if show_poi:
+                poi_types = [
+                    "All", "Bar or Lounge", "Convenience Store", 
+                    "Grocery Store w/ Liquor", "Liquor Store", 
+                    "Nightclub", "Restaurant", "Social Club"
+                ]
+                poi_types_with_all = ["All"] + poi_types
+
+                selected_poi_types = st.multiselect("Choose POI Types (*Note: Liquor vendors only):", poi_types, default=["Nightclub", "Liquor Store", "Bar or Lounge"])
+
+                if "All" in selected_poi_types:
+                    selected_poi_types = poi_types
+                    selected_poi_types.remove("All")
+                else:
+                    selected_poi_types = selected_poi_types
+
+
+        # -----------------------------
+        # 🧹 FILTER DATA
+        # -----------------------------
+        if "All" in selected_incidents:
+            filtered_data = data[data['year'].isin(selected_year)]
+        else:
+            filtered_data = data[(data['category'].isin(selected_incidents)) & 
+                                (data['year'].isin(selected_year))]
+
+
+        filtered_data = filtered_data.dropna(subset=['latitude', 'longitude'])
+        if serious_crime_filter == "Serious Only":
+            filtered_data = filtered_data[filtered_data['crime_severity'] == 'Serious']
+        elif serious_crime_filter == "Non-Serious Only":
+            filtered_data = filtered_data[filtered_data['crime_severity'] == 'Not-Serious']
+        else:
+            filtered_data = filtered_data
+
+        st.markdown(f"### Total Incidents for selected filters:  {len(filtered_data)}")
+
+        # -----------------------------
+        # 🗺️ CREATE MAP
+        # -----------------------------
+        if not filtered_data.empty:
+            # m = folium.Map(location=[42.707, -71.155], zoom_start=14, control_scale=True)
+            m = folium.Map(location=[42.70, -71.155],zoom_start=14,control_scale=True,tiles="CartoDB positron")
+
+            # Add extra padding around map
+            m.get_root().html.add_child(folium.Element("""
+                <style>
+                .leaflet-bottom.leaflet-right {
+                    margin-bottom: 10px;
+                    margin-right: 10px;
+                }
+                </style>
+            """))
+
+            # Add Lawrence city boundary
+            folium.GeoJson(
+                lawrence_geojson,
+                name="Lawrence Border",
+                style_function=lambda x: {
+                    'color': 'black',
+                    'weight': 3,
+                    'fillOpacity': 0
+                }
+            ).add_to(m)
+
+            # Add Poverty Choropleth Layer (Toggleable)
+            if poverty_layer_enabled:
+                poverty_path = os.path.join(os.path.dirname(__file__), "boundaries", "poverty_boundary.geojson")
+                with open(poverty_path, "r") as f:
+                    poverty_data = json.load(f)
+
+                # convert choropleth_data to a df, better runtime performance than lists of lists
+                choropleth_data = pd.DataFrame([
+                    {
+                        "tract": feature["properties"].get("tract"),
+                        "Estimate": feature["properties"].get("Estimate")
+                    }
+                    for feature in poverty_data["features"]
+                    if feature["properties"].get("tract") and feature["properties"].get("Estimate") is not None
+                ])
+                
+                folium.Choropleth(
+                    geo_data=poverty_data,
+                    name="Poverty Index",
+                    data=choropleth_data,
+                    columns=["tract", "Estimate"],
+                    key_on="feature.properties.tract",
+                    fill_color="OrRd",
+                    fill_opacity=0.7,
+                    line_opacity=0.2,
+                    legend_name="Percent Below Poverty Line (%)",
+                ).add_to(m)
+
+                # -----------------------------
+                # 🧾 ADD CUSTOM POVERTY LEGEND
+                # -----------------------------
+                legend_html = """
+                <div style="
+                    position: fixed; 
+                    bottom: 40px; 
+                    left: 40px; 
+                    z-index:9999; 
+                    background-color: white; 
+                    padding: 10px; 
+                    border:2px solid gray; 
+                    border-radius: 5px;
+                    font-size: 14px;
+                    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+                ">
+                    <strong style="color: black;">Poverty Estimate (%)</strong><br>
+                    <span style="color: black;">
+                        <i style="background:#fff5eb;width:20px;height:10px;display:inline-block;"></i> 0–8%<br>
+                        <i style="background:#fcbba1;width:20px;height:10px;display:inline-block;"></i> 8–15.6%<br>
+                        <i style="background:#fc9272;width:20px;height:10px;display:inline-block;"></i> 15.6–20.3%<br>
+                        <i style="background:#fb6a4a;width:20px;height:10px;display:inline-block;"></i> 20.3–28.4%<br>
+                        <i style="background:#de2d26;width:20px;height:10px;display:inline-block;"></i> 28.4–36.7%<br>
+                        <i style="background:#a50f15;width:20px;height:10px;display:inline-block;"></i> 36.7%+
+                    </span>
+                </div>
+                """
+
+                m.get_root().html.add_child(folium.Element(legend_html))
+            # -----------------------------
+            # 🧼 Define POI marker style
+            # -----------------------------
+            poi_style_map = {
+                "Restaurant": {"color": "black", "icon": "cutlery"},
+                "Liquor Store": {"color": "black", "icon": "shopping-cart"},
+                "Bar or Lounge": {"color": "black", "icon": "glass"},
+                "Nightclub": {"color": "black", "icon": "music"},
+                "Grocery Store w/ Liquor": {"color": "black", "icon": "shopping-cart"},
+                "Convenience Store": {"color": "black", "icon": "shopping-cart"},
+                "Social Club": {"color": "black", "icon": "star"}
+            }
+
+            # -----------------------------
+            # 📍 Add POI Markers to Map
+            # -----------------------------
+            if show_poi and selected_poi_types:
+                for poi_type in selected_poi_types:
+                    df = liquor_df[liquor_df["TYPE"] == poi_type]
+                    style = poi_style_map.get(poi_type, {"color": "gray", "icon": "info-sign"})
+
+                    for _, row in df.iterrows():
+                        folium.Marker(
+                            location=[row["latitude"], row["longitude"]],
+                            popup=f'{row["NAME"]} ({poi_type})',
+                            tooltip=row["NAME"],
+                            icon=folium.Icon(color=style["color"], icon=style["icon"])
+                        ).add_to(m)
+            
+                # -----------------------------
+                # 🧾 POI Legend
+                # -----------------------------
+                legend_lines = ["<b>POI Legend</b><br>"]
+                for poi_type in selected_poi_types:
+                    style = poi_style_map.get(poi_type, {})
+                    color = style.get("color", "gray")
+                    icon = style.get("icon", "info-sign")
+
+                    if poi_type == "Bar or Lounge":
+                        legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+                    else:
+                        legend_lines.append(f'<i class="fa fa-{icon}" style="color:{color};"></i> {poi_type}<br>')
+                        # legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+
+                poi_legend_html = f"""
+                <div style="
+                    position: fixed;
+                    bottom: 220px;
+                    left: 40px;
+                    width: 280px;
+                    background-color: white;
+                    border:2px solid gray;
+                    border-radius: 5px;
+                    z-index:9999;
+                    font-size:14px;
+                    padding: 10px;
+                    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+                ">
+                <span style="color:black;">
+                {''.join(legend_lines)}
+                </span>
+                </div>
+                """
+
+                m.get_root().html.add_child(folium.Element(poi_legend_html))
+            # -----------------------------
+            # Add Heatmap or Clustered Markers
+            # -----------------------------
+            if heatmap_enabled:
+                heat_data = filtered_data[['latitude', 'longitude']].dropna()
+                heat_data = heat_data[
+                    (heat_data['latitude'].apply(lambda x: isinstance(x, (float, int)))) &
+                    (heat_data['longitude'].apply(lambda x: isinstance(x, (float, int))))
+                ]
+                heat_list = heat_data[['latitude', 'longitude']].values.tolist()
+                if heat_list:
+                    HeatMap(heat_list).add_to(m)
+            else:
+                # Custom JS/CSS for cluster colors:
+                custom_css_js_fixed_circle = """
+                <style>
+                .marker-cluster-small,
+                .marker-cluster-medium,
+                .marker-cluster-large {
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    border-radius: 50% !important;
+                    border: none !important;
+                    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+                    color: white !important;
+                    font-weight: bold !important;
+                    text-align: center !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+
+                .marker-cluster-small {
+                    width: 30px !important;
+                    height: 30px !important;
+                    font-size: 14px !important;
+                    background-color: #0072B2 !important;
+                }
+
+                .marker-cluster-medium {
+                    width: 40px !important;
+                    height: 40px !important;
+                    font-size: 16px !important;
+                    background-color: #E69F00 !important;
+                }
+
+                .marker-cluster-large {
+                    width: 50px !important;
+                    height: 50px !important;
+                    font-size: 18px !important;
+                    background-color: #D55E00 !important;
+                }
+
+                .marker-cluster div {
+                    background: none !important;
+                    border: none !important;
+                    box-shadow: none !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                </style>
+
+                <script>
+                L.MarkerClusterGroup.prototype.options.iconCreateFunction = function (cluster) {
+                    var count = cluster.getChildCount();
+                    var c = ' marker-cluster-';
+                    var size = 30;
+                    if (count < 10) {
+                        c += 'small';
+                        size = 30;
+                    } else if (count < 100) {
+                        c += 'medium';
+                        size = 40;
+                    } else {
+                        c += 'large';
+                        size = 50;
+                    }
+                    return new L.DivIcon({
+                        html: '<div><span>' + count + '</span></div>',
+                        className: 'marker-cluster' + c,
+                        iconSize: new L.Point(size, size)
+                    });
+                };
+                </script>
+                """
+
+                m.get_root().html.add_child(folium.Element(custom_css_js_fixed_circle))
+
+
+                marker_cluster = MarkerCluster().add_to(m)
+                for _, row in filtered_data.iterrows():
+                    popup_text = f"{row['Date']}<br>{row['category']}"
+                    folium.CircleMarker(
+                        location=(row['latitude'], row['longitude']),
+                        radius=6,
+                        color="#0072B2",
+                        fill=True,
+                        fill_opacity=0.8,
+                        popup=popup_text
+                    ).add_to(marker_cluster)
+
+
+
+                # Add Layer Control and render
+                folium.LayerControl().add_to(m)
+                st_data = st_folium(m, width="100%", height=750)
+
+
+            # Add Layer Control (for toggling on/off the choropleth)
+            folium.LayerControl().add_to(m)
+
+            # Render the map in Streamlit
+            st_data = st_folium(m, width="100%", height=750)
+
+        else:
+            st.warning("No data to display on the map for the selected filters.")
+
+    else:
+        st.sidebar.empty()  # hides sidebar for other tabs
+
+
