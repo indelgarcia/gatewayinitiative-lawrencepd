@@ -41,13 +41,52 @@ tab1, tab2, tab3 = st.tabs(["About the Project", "Data Trends", "Spatial Insight
 # About the Project tab
 with tab1:
     set_tab("## About the Project")
-    st.markdown(""" 
-                The Lawrence Police Dashboard Project transforms publicly available crime data from the Lawrence Police Department into powerful, interactive visualizations. Designed to serve Gateway Communities, starting with Lawrence, our dashboard reveals crime patterns, trends over time, and geographic hotspots across the city.
 
-Our goal is to make complex crime data accessible and actionable for residents, policymakers, and law enforcement. By integrating additional data like socioeconomic and demographic factors, we provide a deeper understanding of the many influences on public safety—helping the community work together toward safer neighborhoods.
+    st.markdown("""
+    ### About the Lawrence Police Dashboard
 
-Explore the dashboard to discover detailed insights and support informed decision-making that drives positive change.
-""")
+    The Lawrence Police Dashboard transforms publicly available daily police log data from the Lawrence Police Department into powerful, interactive visualizations. The dashboard highlights when, where, and what types of incidents occur, helping residents, community groups, and decision‑makers understand public-safety patterns and take informed action.
+
+    By integrating additional data like socioeconomic and demographic factors, we provide a deeper understanding of the many influences on public safety, helping the community work together toward safer neighborhoods.
+
+    ---
+
+    ### What the Dashboard Shows
+    - Incident trends over time (monthly, yearly)
+    - Spatial patterns across neighborhoods and points of interest
+    - Breakdown by incident category, with filters for year and category and “serious crime”
+
+    ---
+
+    ### Data Sources
+    - Lawrence Police Department Daily Logs: Publicly available incident-level entries with timestamps and locations.
+    - Context Data Layers (in progress): Neighborhood‑level socioeconomic and demographic indicators (e.g., poverty rates) added at census‑tract scales to preserve privacy and support equitable insights.
+    - Points of Reference (POIs): Optional map overlays to provide context around nearby places, including bars or lounges, convenience stores, grocery stores that sell alcohol, liquor stores, nightclubs, restaurants, and social clubs.
+
+    ---
+
+    ### Incident categories
+    - Motor Vehicle Incidents: Traffic stops, crashes, disabled/abandoned cars, towing, road hazards, lockouts.
+    - Preventive Policing: Extra patrols, building/business checks, park‑and‑walks, selective enforcement.
+    - Public Disturbances: Disorder/noise, trespassing, unwanted guests, neighbor disputes, drinking in public, dumping, fireworks.
+    - Fire and Arson Incidents: Fire calls and alarms (buildings/vehicles), assist fire department, arson.
+    - Domestic Disputes and Protection: Domestic incidents, restraining orders (serve/violation), emergency orders, keep‑the‑peace.
+    - Suspicious/Unusual Activity: Suspicious person/vehicle, gang intel, video extraction, annoying/harassing calls.
+    - Law Enforcement Operations: Investigations, warrants, transports, pursuits, mutual aid, escorts/details, evidence handling, specialized unit deployments.
+    - Medical/Welfare Assistance: Welfare checks, ambulance assists, person down, suicide attempts, missing/lost persons.
+    - Property Crimes: Burglary/B&E (home/vehicle), theft/attempts (incl. shoplifting), vandalism, stolen/recovered property, lost/found.
+    - Financial Crimes and Fraud: Counterfeit, forgery/uttering, identity theft, fraud, bribery.
+    - Violent/Weapons Offenses: Assaults, threats, stalking, sex offenses, shots‑fired/weapons calls, homicide, robberies, home invasion.
+    - Drug and Substance Use: Drug investigations, overdoses, evidence seizures, violations.
+    - Court/Admin Procedures: Court service/time, warrants, Sections 12/35, escorts, training, alarm excusals.
+    - Other: Miscellaneous service calls (e.g., wires down, animals, notifications, 911 hang‑ups, street closures, civil/admin items).
+
+    ---
+
+    ### Serious crimes
+    Serious crimes highlight higher‑harm and higher‑risk events—violent offenses (e.g., assaults with weapons, robberies, shootings, home invasions), sex offenses and child/elder harm, major property crimes (burglary, significant theft, arson), kidnapping and domestic incidents with protective‑order violations, drug‑related emergencies and enforcement, and critical incidents like vehicle pursuits and fatalities.
+    """)
+
 with tab2:
     set_tab("Data Trends")
     # st.title("📊 Data Trends")
@@ -293,7 +332,7 @@ with tab3:
                 ]
                 poi_types_with_all = ["All"] + poi_types
 
-                selected_poi_types = st.multiselect("Choose POI Types (*Note: Liquor vendors only):", poi_types, default=["Nightclub", "Liquor Store", "Bar or Lounge"])
+                selected_poi_types = st.multiselect("Choose POI Types (*Note: Liquor vendors only):", poi_types, default=["All"])
 
                 if "All" in selected_poi_types:
                     selected_poi_types = poi_types
