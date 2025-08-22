@@ -6,6 +6,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## [Unreleased]
 
+## [0.4.1] - 2025-08-02
+### Updated
+- `streamlit_app.py` to `main.py`
+1. Sidebar - Author, RITIKA
+- “streamlit app” renamed to map insights
+- “TableauDashboard” to trends
+- “Lawrence Police Daily logs” to “Lawrence Police Dashboard” - RITIKA
+- About Project after the heading
+- Fix— 🗓️ [2018, 2019, 2020, 2021, 2022, 2023, 2024] | 8548 incident(s) shown
+- remove brackets
+- Map fit page height (width is good)
+- Incident pointers (change color, red/green hard to read for color blind)
+- Standardize incident names (“category” in dataset)
+- Change “category” in the dataset, then upload to Tableau
+
+2. POI - Author, RITIKA
+- Remove the legend after toggling off
+- Combine Convenience store & Grocery Store (quick fix: combine icon + color)
+- All colors to black
+
+3. Tableau Dashboard - INDEL
+- Fit page height and width
+- Tableau dashboard - make each figure in a dropdown
+- Incidents per category (together with “percentage” and serious v. non-serious)
+- Incidents per year (together with serious v. non-serious)
+- Incidents per month  (together with serious v. non-serious)
+- change the layout, too crowded
+- Bar and pie chart together, colors in bar and pie chart same
+
+
 ## [0.4.0] - 2025-08-01
 ### Updated
 - `streamlit_app.py` to 
