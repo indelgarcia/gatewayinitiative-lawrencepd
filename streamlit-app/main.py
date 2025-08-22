@@ -61,6 +61,7 @@ with tab1:
     - Lawrence Police Department Daily Logs: Publicly available incident-level entries with timestamps and locations.
     - Context Data Layers (in progress): Neighborhood‑level socioeconomic and demographic indicators (e.g., poverty rates) added at census‑tract scales to preserve privacy and support equitable insights.
     - Points of Interests (POIs): Optional map overlays to provide context around nearby places, including bars or lounges, convenience stores, grocery stores that sell alcohol, liquor stores, nightclubs, restaurants, and social clubs.
+        - POI Source: https://www.mass.gov/info-details/abcc-active-licenses
 
     ---
 
