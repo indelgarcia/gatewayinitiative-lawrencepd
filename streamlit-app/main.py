@@ -43,7 +43,6 @@ with tab1:
     set_tab("## About the Project")
 
     st.markdown("""
-    ### About the Lawrence Police Dashboard
 
     The Lawrence Police Dashboard transforms publicly available daily police log data from the Lawrence Police Department into powerful, interactive visualizations. The dashboard highlights when, where, and what types of incidents occur, helping residents, community groups, and decision‑makers understand public-safety patterns and take informed action.
 
@@ -61,7 +60,7 @@ with tab1:
     ### Data Sources
     - Lawrence Police Department Daily Logs: Publicly available incident-level entries with timestamps and locations.
     - Context Data Layers (in progress): Neighborhood‑level socioeconomic and demographic indicators (e.g., poverty rates) added at census‑tract scales to preserve privacy and support equitable insights.
-    - Points of Reference (POIs): Optional map overlays to provide context around nearby places, including bars or lounges, convenience stores, grocery stores that sell alcohol, liquor stores, nightclubs, restaurants, and social clubs.
+    - Points of Interests (POIs): Optional map overlays to provide context around nearby places, including bars or lounges, convenience stores, grocery stores that sell alcohol, liquor stores, nightclubs, restaurants, and social clubs.
 
     ---
 
