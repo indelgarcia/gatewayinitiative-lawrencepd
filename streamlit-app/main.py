@@ -482,12 +482,9 @@ with tab3:
                     style = poi_style_map.get(poi_type, {})
                     color = style.get("color", "gray")
                     icon = style.get("icon", "info-sign")
-
-                    if poi_type == "Bar or Lounge":
-                        legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
-                    else:
-                        legend_lines.append(f'<i class="fa fa-{icon}" style="color:{color};"></i> {poi_type}<br>')
-                        # legend_lines.append(f'<i style="color:{color};">⬤</i> {poi_type}<br>')
+                    legend_lines.append(
+                    f'<i class="glyphicon glyphicon-{icon}" style="color:{color}"></i> {poi_type}<br>'
+                    )
 
                 poi_legend_html = f"""
                 <div style="
