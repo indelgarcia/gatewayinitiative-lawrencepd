@@ -85,7 +85,43 @@ with tab1:
 
     ### Serious crimes
     Serious crimes highlight higher‑harm and higher‑risk events—violent offenses (e.g., assaults with weapons, robberies, shootings, home invasions), sex offenses and child/elder harm, major property crimes (burglary, significant theft, arson), kidnapping and domestic incidents with protective‑order violations, drug‑related emergencies and enforcement, and critical incidents like vehicle pursuits and fatalities.
-    """)
+    
+    ---         
+
+    ## About the Tableau Views
+
+    The **Data Trends** tab contains three Tableau views.
+
+    ### How to use this tab
+    - Open **Data Trends**, then pick a view from **Choose a Tableau view** from the sidebar.
+    - Use the filters on the right side of the Tableau viz, Category and Crime Severity, to refine what you see.
+    - Hover to see exact values, click legend items to highlight, and use the toolbar to download or view full screen.
+
+    ### The three views
+
+    **Incidents Per Category**
+    - Bar chart of the number of incidents by category.
+    - Pie chart showing the percent share by category.
+    - Pie chart showing Serious vs Non-Serious counts for the current filters.
+
+    **Incidents Per Year**
+    - Line chart of total incidents by year.
+    - Use this to spot multi-year trends, peaks, and declines.
+    - Category and Crime Severity filters still apply.
+
+    **Incidents Per Month**
+    - Line chart of incidents by month, across all years 2018-2024.
+    - Helpful for seasonality and month to month changes.
+    - Category and Crime Severity filters still apply.
+
+    ### Notes on categories and severity
+        - These filters are already explained earlier in this section.
+
+
+    ### Data context
+    - Source, Lawrence Police Department daily logs.
+    - Entries reflect calls for service and their respective reports, not court outcomes.      
+        """)
 
 with tab2:
     set_tab("Data Trends")
