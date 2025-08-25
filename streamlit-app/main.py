@@ -44,7 +44,7 @@ with tab1:
 
     st.markdown("""
 
-    The Lawrence Police Dashboard transforms publicly available daily police log data from the Lawrence Police Department into powerful, interactive visualizations. The dashboard highlights when, where, and what types of incidents occur, helping residents, community groups, and decision‑makers understand public-safety patterns and take informed action.
+    The Lawrence Police Dashboard transforms publicly available daily police log data from the Lawrence Police Department into powerful, interactive visualizations. The dashboard highlights when, where, and what kinds of incidents occur, with the aim of equipping residents, community organizations, and policymakers to understand public safety patterns and make informed decisions. 
 
     By integrating additional data like socioeconomic and demographic factors, we provide a deeper understanding of the many influences on public safety, helping the community work together toward safer neighborhoods.
 
@@ -558,7 +558,7 @@ with tab3:
                 <style>
                 .marker-cluster-small,
                 .marker-cluster-medium,
-                .marker-cluster-large {
+                .marker-cluster-large{
                     display: flex !important;
                     align-items: center !important;
                     justify-content: center !important;
@@ -607,15 +607,15 @@ with tab3:
                     var count = cluster.getChildCount();
                     var c = ' marker-cluster-';
                     var size = 30;
-                    if (count < 10) {
+                    if (count < 50) {
                         c += 'small';
-                        size = 30;
-                    } else if (count < 100) {
+                        size = 25;
+                    } else if (count < 250) {
                         c += 'medium';
-                        size = 40;
+                        size = 50;
                     } else {
                         c += 'large';
-                        size = 50;
+                        size = 70;
                     }
                     return new L.DivIcon({
                         html: '<div><span>' + count + '</span></div>',
