@@ -352,7 +352,13 @@ with tab3:
             # -----------------------------
             # Poverty Toggle
             # -----------------------------
-            poverty_layer_enabled = st.sidebar.toggle("Show Poverty Data Layer", value=False)
+            
+            secondary_choice = st.selectbox(
+                "Show Secondary Data",
+                ["None", "Poverty Data"],
+                index=0
+            )
+            poverty_layer_enabled = secondary_choice == "Poverty Data"
 
             # -----------------------------
             # 🗺️ POI Toggle and Category Filters
