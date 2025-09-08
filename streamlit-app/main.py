@@ -541,12 +541,11 @@ with tab3:
                 ">
                     <strong style="color: black;">Unemployment Rate (%)</strong><br>
                     <span style="color: black;">
-                        <i style="background:#f7fbff;width:20px;height:10px;display:inline-block;"></i> 0–5%<br>
-                        <i style="background:#deebf7;width:20px;height:10px;display:inline-block;"></i> 5–8%<br>
-                        <i style="background:#c6dbef;width:20px;height:10px;display:inline-block;"></i> 8–10%<br>
-                        <i style="background:#9ecae1;width:20px;height:10px;display:inline-block;"></i> 10–12%<br>
-                        <i style="background:#6baed6;width:20px;height:10px;display:inline-block;"></i> 12–16%<br>
-                        <i style="background:#2171b5;width:20px;height:10px;display:inline-block;"></i> 16%+
+                        <i style="background:#f7fbff;width:20px;height:10px;display:inline-block;"></i> 2.3%<br>
+                        <i style="background:#deebf7;width:20px;height:10px;display:inline-block;"></i> 2.4 – 5.2%<br>
+                        <i style="background:#9ecae1;width:20px;height:10px;display:inline-block;"></i> 5.3 – 8.3%<br>
+                        <i style="background:#4292c6;width:20px;height:10px;display:inline-block;"></i> 8.4 – 10.4%<br>
+                        <i style="background:#08519c;width:20px;height:10px;display:inline-block;"></i> 10.5 – 12.8%<br>
                     </span>
                 </div>
                 """
