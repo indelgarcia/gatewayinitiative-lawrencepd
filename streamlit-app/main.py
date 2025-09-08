@@ -44,7 +44,7 @@ with tab1:
 
     st.markdown("""
 
-    The Lawrence Police Dashboard transforms publicly available daily police log data from the Lawrence Police Department into powerful, interactive visualizations. The dashboard highlights when, where, and what types of incidents occur, helping residents, community groups, and decision‑makers understand public-safety patterns and take informed action.
+    The Lawrence Police Dashboard transforms publicly available daily police log data from the Lawrence Police Department into powerful, interactive visualizations. The dashboard highlights when, where, and what kinds of incidents occur, with the aim of equipping residents, community organizations, and policymakers to understand public safety patterns and make informed decisions. 
 
     By integrating additional data like socioeconomic and demographic factors, we provide a deeper understanding of the many influences on public safety, helping the community work together toward safer neighborhoods.
 
@@ -58,10 +58,9 @@ with tab1:
     ---
 
     ### Data Sources
-    - Lawrence Police Department Daily Logs: Publicly available incident-level entries with timestamps and locations.
-    - Context Data Layers (in progress): Neighborhood‑level socioeconomic and demographic indicators (e.g., poverty rates) added at census‑tract scales to preserve privacy and support equitable insights.
-    - Points of Interests (POIs): Optional map overlays to provide context around nearby places, including bars or lounges, convenience stores, grocery stores that sell alcohol, liquor stores, nightclubs, restaurants, and social clubs.
-        - POI Source: https://www.mass.gov/info-details/abcc-active-licenses
+    - Lawrence Police Department Daily Logs: Publicly available incident-level entries with timestamps and locations. (Source: https://www.lawpd.com/DocumentCenter/Index/237)
+    - Context Data Layers (in progress): Neighborhood‑level socioeconomic and demographic indicators (e.g., poverty rates) added at census‑tract scales to preserve privacy and support equitable insights. (Source: https://data.census.gov)
+    - Points of Interests (POIs): Optional map overlays to provide context around nearby places, including bars or lounges, convenience stores, grocery stores that sell alcohol, liquor stores, nightclubs, restaurants, and social clubs. (Source: https://www.mass.gov/info-details/abcc-active-licenses)
 
     ---
 
@@ -88,16 +87,16 @@ with tab1:
     
     ---         
 
-    ## About the Tableau Views
+    ### About Data Trends
 
     The **Data Trends** tab contains three Tableau views.
 
-    ### How to use this tab
+    #### How to use this tab
     - Open **Data Trends**, then pick a view from **Choose a Tableau view** from the sidebar.
     - Use the filters on the right side of the Tableau viz, Category and Crime Severity, to refine what you see.
     - Hover to see exact values, click legend items to highlight, and use the toolbar to download or view full screen.
 
-    ### The three views
+    #### The three views
 
     **Incidents Per Category**
     - Bar chart of the number of incidents by category.
@@ -113,9 +112,6 @@ with tab1:
     - Line chart of incidents by month, across all years 2018-2024.
     - Helpful for seasonality and month to month changes.
     - Category and Crime Severity filters still apply.
-
-    ### Notes on categories and severity
-        - These filters are already explained earlier in this section.
 
 
     ### Data context
@@ -631,7 +627,7 @@ with tab3:
                 <style>
                 .marker-cluster-small,
                 .marker-cluster-medium,
-                .marker-cluster-large {
+                .marker-cluster-large{
                     display: flex !important;
                     align-items: center !important;
                     justify-content: center !important;
@@ -680,15 +676,15 @@ with tab3:
                     var count = cluster.getChildCount();
                     var c = ' marker-cluster-';
                     var size = 30;
-                    if (count < 10) {
+                    if (count < 50) {
                         c += 'small';
-                        size = 30;
-                    } else if (count < 100) {
+                        size = 25;
+                    } else if (count < 250) {
                         c += 'medium';
-                        size = 40;
+                        size = 50;
                     } else {
                         c += 'large';
-                        size = 50;
+                        size = 70;
                     }
                     return new L.DivIcon({
                         html: '<div><span>' + count + '</span></div>',
@@ -717,8 +713,8 @@ with tab3:
 
 
                 # Add Layer Control and render
-                folium.LayerControl().add_to(m)
-                st_data = st_folium(m, width="100%", height=750)
+                # folium.LayerControl().add_to(m)
+                # st_data = st_folium(m, width="100%", height=750)
 
 
             # Add Layer Control (for toggling on/off the choropleth)
