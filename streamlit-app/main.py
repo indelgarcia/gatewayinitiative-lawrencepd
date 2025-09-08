@@ -351,11 +351,12 @@ with tab3:
             
             secondary_choice = st.selectbox(
                 "Show Secondary Data",
-                ["None", "Poverty Data", "Unemployment Data"],
+                ["None", "Poverty Data", "Median Household Income", "Unemployment Data"],
                 index=0
             )
             poverty_layer_enabled = secondary_choice == "Poverty Data"
             unemployment_layer_enabled = secondary_choice == "Unemployment Data"
+            median_household_income_layer_enabled = secondary_choice == "Median Household Income"
 
             # -----------------------------
             # 🗺️ POI Toggle and Category Filters
@@ -488,7 +489,7 @@ with tab3:
 
 
             # -------------------------------------------------------
-            # NEW: Add Unemployment Choropleth Layer, mirrors poverty
+            # Add Unemployment Choropleth Layer, mirrors poverty
             # -------------------------------------------------------
             if unemployment_layer_enabled:
                 unemployment_path = os.path.join(os.path.dirname(__file__), "boundaries", "unemployment_boundary.geojson")
@@ -513,7 +514,7 @@ with tab3:
                     data=unemployment_df,
                     columns=["tract", "Estimate"],
                     key_on="feature.properties.tract",
-                    fill_color="Blues",          # NEW: distinct palette
+                    fill_color="Blues",          #distinct palette
                     fill_opacity=0.7,
                     line_opacity=0.2,
                     legend_name="Unemployment Rate (%)",
@@ -546,6 +547,66 @@ with tab3:
                 </div>
                 """
                 m.get_root().html.add_child(folium.Element(unemployment_legend_html))
+
+            # -------------------------------------------------------
+            # Add Median Household Income Choropleth Layer
+            # -------------------------------------------------------
+            if median_household_income_layer_enabled:
+                median_household_income_path = os.path.join(os.path.dirname(__file__), "boundaries", "household_income_boundary.geojson")
+                with open(median_household_income_path, "r") as f:
+                    median_household_income_data = json.load(f)
+
+                # build DataFrame using tract and Estimate
+                median_household_income_df = pd.DataFrame([
+                    {
+                        "tract": feature["properties"].get("tract"),
+                        "Estimate": feature["properties"].get("Estimate")
+                    }
+                    for feature in median_household_income_data.get("features", [])
+                    if feature.get("properties")
+                    and feature["properties"].get("tract")
+                    and feature["properties"].get("Estimate") is not None
+                ])
+
+                folium.Choropleth(
+                    geo_data=median_household_income_data,
+                    name="Median Household Income",
+                    data=median_household_income_df,
+                    columns=["tract", "Estimate"],
+                    key_on="feature.properties.tract",
+                    fill_color="Blues", #change color here if needed
+                    fill_opacity=0.7,
+                    line_opacity=0.2,
+                    legend_name="Median Household Income (%)",
+                ).add_to(m)
+
+                # ----------------------------- 
+                # Median Household Income Legend (USD)
+                # -----------------------------
+                median_household_income_data_legend_html = """
+                <div style="
+                    position: fixed; 
+                    bottom: 40px; 
+                    left: 40px; 
+                    z-index:9999; 
+                    background-color: white; 
+                    padding: 10px; 
+                    border:2px solid gray; 
+                    border-radius: 5px;
+                    font-size: 14px;
+                    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+                ">
+                    <strong style="color: black;">Median Household Income (USD)</strong><br>
+                    <span style="color: black;">
+                        <i style="background:#08519c;width:20px;height:10px;display:inline-block;"></i> $76k to $88k<br>
+                        <i style="background:#4292c6;width:20px;height:10px;display:inline-block;"></i> $61k to $76k<br>
+                        <i style="background:#9ecae1;width:20px;height:10px;display:inline-block;"></i> $41k to $61k<br>
+                        <i style="background:#deebf7;width:20px;height:10px;display:inline-block;"></i> $33k to $41k<br>
+                        <i style="background:#f7fbff;width:20px;height:10px;display:inline-block;"></i> $23k to $33k<br>
+                    </span>
+                </div>
+                """
+                m.get_root().html.add_child(folium.Element(median_household_income_data_legend_html))
 
             # -----------------------------
             # 🧼 Define POI marker style
