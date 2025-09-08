@@ -350,15 +350,16 @@ with tab3:
             heatmap_enabled = st.sidebar.toggle("Show Heatmap", value=False)
 
             # -----------------------------
-            # Poverty Toggle
+            # Secondary Data Selectbox
             # -----------------------------
             
             secondary_choice = st.selectbox(
                 "Show Secondary Data",
-                ["None", "Poverty Data"],
+                ["None", "Poverty Data", "Unemployment Data"],
                 index=0
             )
             poverty_layer_enabled = secondary_choice == "Poverty Data"
+            unemployment_layer_enabled = secondary_choice == "Unemployment Data"
 
             # -----------------------------
             # 🗺️ POI Toggle and Category Filters
@@ -488,6 +489,69 @@ with tab3:
                 """
 
                 m.get_root().html.add_child(folium.Element(legend_html))
+
+
+            # -------------------------------------------------------
+            # NEW: Add Unemployment Choropleth Layer, mirrors poverty
+            # -------------------------------------------------------
+            if unemployment_layer_enabled:
+                unemployment_path = os.path.join(os.path.dirname(__file__), "boundaries", "unemployment_boundary.geojson")
+                with open(unemployment_path, "r") as f:
+                    unemployment_data = json.load(f)
+
+                # NEW: build DataFrame like poverty, using tract and Estimate
+                unemployment_df = pd.DataFrame([
+                    {
+                        "tract": feature["properties"].get("tract"),
+                        "Estimate": feature["properties"].get("Estimate")
+                    }
+                    for feature in unemployment_data.get("features", [])
+                    if feature.get("properties")
+                    and feature["properties"].get("tract")
+                    and feature["properties"].get("Estimate") is not None
+                ])
+
+                folium.Choropleth(
+                    geo_data=unemployment_data,
+                    name="Unemployment Data",
+                    data=unemployment_df,
+                    columns=["tract", "Estimate"],
+                    key_on="feature.properties.tract",
+                    fill_color="Blues",          # NEW: distinct palette
+                    fill_opacity=0.7,
+                    line_opacity=0.2,
+                    legend_name="Unemployment Rate (%)",
+                ).add_to(m)
+
+                # -----------------------------
+                # Unemployment Legend, same style as poverty legend
+                # -----------------------------
+                unemployment_legend_html = """
+                <div style="
+                    position: fixed; 
+                    bottom: 40px; 
+                    left: 40px; 
+                    z-index:9999; 
+                    background-color: white; 
+                    padding: 10px; 
+                    border:2px solid gray; 
+                    border-radius: 5px;
+                    font-size: 14px;
+                    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+                ">
+                    <strong style="color: black;">Unemployment Rate (%)</strong><br>
+                    <span style="color: black;">
+                        <i style="background:#f7fbff;width:20px;height:10px;display:inline-block;"></i> 0–5%<br>
+                        <i style="background:#deebf7;width:20px;height:10px;display:inline-block;"></i> 5–8%<br>
+                        <i style="background:#c6dbef;width:20px;height:10px;display:inline-block;"></i> 8–10%<br>
+                        <i style="background:#9ecae1;width:20px;height:10px;display:inline-block;"></i> 10–12%<br>
+                        <i style="background:#6baed6;width:20px;height:10px;display:inline-block;"></i> 12–16%<br>
+                        <i style="background:#2171b5;width:20px;height:10px;display:inline-block;"></i> 16%+
+                    </span>
+                </div>
+                """
+                m.get_root().html.add_child(folium.Element(unemployment_legend_html))
+
             # -----------------------------
             # 🧼 Define POI marker style
             # -----------------------------
