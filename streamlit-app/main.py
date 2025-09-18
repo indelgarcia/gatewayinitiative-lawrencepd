@@ -496,7 +496,7 @@ with tab3:
                 with open(unemployment_path, "r") as f:
                     unemployment_data = json.load(f)
 
-                # NEW: build DataFrame like poverty, using tract and Estimate
+                # build DataFrame like poverty, using tract and Estimate
                 unemployment_df = pd.DataFrame([
                     {
                         "tract": feature["properties"].get("tract"),
@@ -514,7 +514,7 @@ with tab3:
                     data=unemployment_df,
                     columns=["tract", "Estimate"],
                     key_on="feature.properties.tract",
-                    fill_color="Blues",          #distinct palette
+                    fill_color="OrRd", 
                     fill_opacity=0.7,
                     line_opacity=0.2,
                     legend_name="Unemployment Rate (%)",
@@ -538,11 +538,11 @@ with tab3:
                 ">
                     <strong style="color: black;">Unemployment Rate (%)</strong><br>
                     <span style="color: black;">
-                        <i style="background:#f7fbff;width:20px;height:10px;display:inline-block;"></i> 2.3%<br>
-                        <i style="background:#deebf7;width:20px;height:10px;display:inline-block;"></i> 2.4 – 5.2%<br>
-                        <i style="background:#9ecae1;width:20px;height:10px;display:inline-block;"></i> 5.3 – 8.3%<br>
-                        <i style="background:#4292c6;width:20px;height:10px;display:inline-block;"></i> 8.4 – 10.4%<br>
-                        <i style="background:#08519c;width:20px;height:10px;display:inline-block;"></i> 10.5 – 12.8%<br>
+                        <i style="background:#fff5f0;width:20px;height:10px;display:inline-block;"></i> 2.3%<br>
+                        <i style="background:#fcbba1;width:20px;height:10px;display:inline-block;"></i> 2.4 – 5.2%<br>
+                        <i style="background:#fc9272;width:20px;height:10px;display:inline-block;"></i> 5.3 – 8.3%<br>
+                        <i style="background:#fb6a4a;width:20px;height:10px;display:inline-block;"></i> 8.4 – 10.4%<br>
+                        <i style="background:#cb181d;width:20px;height:10px;display:inline-block;"></i> 10.5 – 12.8%<br>
                     </span>
                 </div>
                 """
@@ -574,7 +574,7 @@ with tab3:
                     data=median_household_income_df,
                     columns=["tract", "Estimate"],
                     key_on="feature.properties.tract",
-                    fill_color="Blues", #change color here if needed
+                    fill_color="OrRd", 
                     fill_opacity=0.7,
                     line_opacity=0.2,
                     legend_name="Median Household Income (%)",
@@ -598,11 +598,11 @@ with tab3:
                 ">
                     <strong style="color: black;">Median Household Income (USD)</strong><br>
                     <span style="color: black;">
-                        <i style="background:#08519c;width:20px;height:10px;display:inline-block;"></i> $76k to $88k<br>
-                        <i style="background:#4292c6;width:20px;height:10px;display:inline-block;"></i> $61k to $76k<br>
-                        <i style="background:#9ecae1;width:20px;height:10px;display:inline-block;"></i> $41k to $61k<br>
-                        <i style="background:#deebf7;width:20px;height:10px;display:inline-block;"></i> $33k to $41k<br>
-                        <i style="background:#f7fbff;width:20px;height:10px;display:inline-block;"></i> $23k to $33k<br>
+                        <i style="background:#cb181d;width:20px;height:10px;display:inline-block;"></i> $76k to $88k<br>
+                        <i style="background:#fb6a4a;width:20px;height:10px;display:inline-block;"></i> $61k to $76k<br>
+                        <i style="background:#fc9272;width:20px;height:10px;display:inline-block;"></i> $41k to $61k<br>
+                        <i style="background:#fcbba1;width:20px;height:10px;display:inline-block;"></i> $33k to $41k<br>
+                        <i style="background:#fff5f0;width:20px;height:10px;display:inline-block;"></i> $23k to $33k<br>
                     </span>
                 </div>
                 """
